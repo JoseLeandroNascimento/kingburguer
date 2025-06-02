@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.kingburguer.ui.theme.KingburguerTheme
 
 @Composable
 fun KingButton(
@@ -27,6 +28,24 @@ fun KingButton(
 
 @Preview(showBackground = true)
 @Composable
-private fun KingButtonPreview() {
-    KingButton(text = "Ola mundo") {}
+private fun KingButtonLightPreview() {
+
+    KingburguerTheme(
+        dynamicColor = false,
+        darkTheme = false
+    ) {
+        KingButton(text = "Ola mundo") {}
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun KingButtonDarkPreview() {
+
+    KingburguerTheme(
+        dynamicColor = false,
+        darkTheme = true
+    ) {
+        KingButton(text = "Ola mundo") {}
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.kingburguer.composes.login
 
+import android.app.UiModeManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.UiMode
 import androidx.compose.ui.unit.dp
 import com.example.kingburguer.R
 import com.example.kingburguer.composes.components.KingButton
@@ -39,7 +41,7 @@ import com.example.kingburguer.ui.theme.KingburguerTheme
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
 
-    Surface(modifier = modifier.padding(top = 40.dp).fillMaxSize()) {
+    Surface(modifier = modifier.fillMaxSize()) {
 
         val scrollState = rememberScrollState()
         var passwordHidden by remember {
@@ -52,7 +54,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(14.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 20.dp).padding(top = 40.dp)
                     .verticalScroll(state = scrollState)
             ) {
 
@@ -135,10 +137,24 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun LoginScreenPreview() {
-    KingburguerTheme {
+private fun LoginScreenLightPreview() {
+    KingburguerTheme(
+        dynamicColor = false,
+        darkTheme = false
+    ) {
+        LoginScreen()
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun LoginScreenDarkPreview() {
+    KingburguerTheme(
+        dynamicColor = false,
+        darkTheme = true
+    ) {
         LoginScreen()
     }
 }
