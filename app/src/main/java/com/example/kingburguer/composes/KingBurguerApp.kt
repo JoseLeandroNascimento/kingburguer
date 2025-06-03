@@ -7,21 +7,49 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.kingburguer.composes.home.HomeScreen
 import com.example.kingburguer.composes.login.LoginScreen
+import com.example.kingburguer.composes.signup.SignupScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
 
 @Composable
 fun KingBurguerApp() {
     val navController = rememberNavController()
-    KingBurguerNavHost(navController=navController)
+    KingBurguerNavHost(navController = navController)
 }
 
 @Composable
-fun KingBurguerNavHost(modifier: Modifier = Modifier,navController: NavHostController) {
+fun KingBurguerNavHost(modifier: Modifier = Modifier, navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = Screen.LOGIN.route){
+    NavHost(navController = navController, startDestination = Screen.LOGIN.route) {
         composable(Screen.LOGIN.route) {
-            LoginScreen()
+            LoginScreen(
+                onSignup = {
+                    navController.navigate(Screen.SIGNUP.route)
+                },
+                onNavigateToHome = {
+                    navController.navigate(Screen.HOME.route){
+                        popUpTo(Screen.LOGIN.route){ inclusive = true}
+                    }
+                }
+            )
+        }
+
+        composable(Screen.SIGNUP.route) {
+            SignupScreen(
+                onNavigationClick = {
+                    navController.navigateUp()
+                },
+                onNavigateToHome = {
+                    navController.navigate(Screen.HOME.route){
+                        popUpTo(Screen.LOGIN.route){ inclusive = true}
+                    }
+                }
+            )
+        }
+
+        composable(Screen.HOME.route) {
+            HomeScreen()
         }
     }
 }
@@ -29,7 +57,9 @@ fun KingBurguerNavHost(modifier: Modifier = Modifier,navController: NavHostContr
 @Preview(showBackground = true)
 @Composable
 private fun KingBurguerAppPreview() {
-    KingburguerTheme {
+    KingburguerTheme(
+        dynamicColor = false
+    ) {
         KingBurguerApp()
     }
 }
