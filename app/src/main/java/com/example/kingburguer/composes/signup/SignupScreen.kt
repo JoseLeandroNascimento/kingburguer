@@ -240,6 +240,7 @@ fun SignupContentScreen(
 
                 KingButton(
                     enable = true,
+                    loading = uiState.isLoading,
                     text = stringResource(R.string.sign_up)
                 ) {
                     viewModel.send()

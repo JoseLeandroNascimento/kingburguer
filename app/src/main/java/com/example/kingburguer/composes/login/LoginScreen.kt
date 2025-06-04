@@ -47,8 +47,8 @@ import com.example.kingburguer.viewmodels.LoginViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
     loginViewModel: LoginViewModel = viewModel(),
-    onNavigateToHome:()-> Unit,
-    onSignup:()-> Unit
+    onNavigateToHome: () -> Unit,
+    onSignup: () -> Unit
 ) {
 
     Surface(modifier = modifier.fillMaxSize()) {
@@ -71,7 +71,7 @@ fun LoginScreen(
             ) {
 
                 LaunchedEffect(uiState.goToHome) {
-                    if(uiState.goToHome){
+                    if (uiState.goToHome) {
                         onNavigateToHome()
                         loginViewModel.reset()
                     }
@@ -143,6 +143,7 @@ fun LoginScreen(
 
                 KingButton(
                     enable = true,
+                    loading = uiState.isLoading,
                     text = stringResource(R.string.send)
                 ) {
                     loginViewModel.send()
