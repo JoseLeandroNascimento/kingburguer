@@ -16,6 +16,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class SignupViewModel : ViewModel() {
 
@@ -126,11 +130,11 @@ class SignupViewModel : ViewModel() {
         formState = formState.copy(confirmPassword = FieldState(field = password, error = null))
     }
 
-    fun updateDocument(document: String){
+    fun updateDocument(document: String) {
 
         val pattern = "###.###.###-##"
         val currentDocument = formState.document.field
-        val result = mask(pattern, currentDocument,document)
+        val result = mask(pattern, currentDocument, document)
 
         if (result.isBlank()) {
             formState = formState.copy(
@@ -156,6 +160,49 @@ class SignupViewModel : ViewModel() {
             document = FieldState(field = result, error = null)
         )
 
+    }
+
+    fun updateBirthdate(value: String) {
+
+        val pattern = "##/##/####"
+        val currentBirthdate = formState.birthdate.field
+        val result = mask(pattern, currentBirthdate, value)
+
+        if (result.length != pattern.length) {
+            formState = formState.copy(
+                birthdate = FieldState(field = result, error = "Data de nascimento inválida")
+            )
+            return
+        }
+
+        try {
+            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).run {
+                isLenient = false
+                parse(result)
+            }?.also {
+
+                val now = Date()
+                if (it.after(now)) {
+                    formState = formState.copy(
+                        birthdate = FieldState(
+                            field = result,
+                            error = "Data de nascimento não pode ser futura"
+                        )
+                    )
+                    return
+                }
+            }
+
+        } catch (e: ParseException) {
+            formState = formState.copy(
+                birthdate = FieldState(field = result, error = "Data de nascimento inválida")
+            )
+            return
+        }
+
+        formState = formState.copy(
+            birthdate = FieldState(field = result, error = null)
+        )
     }
 
     fun send() {

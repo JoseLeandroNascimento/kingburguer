@@ -243,7 +243,11 @@ fun SignupContentScreen(
                 }
 
                 KingTextField(
-                    value = "",
+                    value = TextFieldValue(
+                        text = viewModel.formState.birthdate.field,
+                        selection = TextRange(index = viewModel.formState.birthdate.field.length)
+                    ),
+                    error = viewModel.formState.birthdate.error,
                     label = R.string.birthdate,
                     placeholder = R.string.hint_birthdate,
                     keyBoardType = KeyboardType.Number,
@@ -251,6 +255,7 @@ fun SignupContentScreen(
                     modifier = Modifier
                 ) {
 
+                    viewModel.updateBirthdate(it.text)
                 }
 
 

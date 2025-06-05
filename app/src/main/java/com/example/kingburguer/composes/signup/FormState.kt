@@ -10,5 +10,6 @@ data class FormState(
     val name: FieldState = FieldState(),
     val password: FieldState = FieldState(),
     val confirmPassword: FieldState = FieldState(),
-    val document: FieldState = FieldState()
+    val document: FieldState = FieldState(),
+    val birthdate: FieldState = FieldState(),
 )
