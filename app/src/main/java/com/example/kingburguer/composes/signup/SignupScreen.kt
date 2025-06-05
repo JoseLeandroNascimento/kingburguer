@@ -32,8 +32,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,11 +51,11 @@ import com.example.kingburguer.viewmodels.SignupViewModel
 @Composable
 fun SignupScreen(
     modifier: Modifier = Modifier,
-    onNavigationClick:()-> Unit,
-    onNavigateToHome:()-> Unit,
+    onNavigationClick: () -> Unit,
+    onNavigateToHome: () -> Unit,
     viewModel: SignupViewModel = viewModel(),
 
-) {
+    ) {
 
     Surface(
         modifier = modifier.fillMaxSize()
@@ -61,7 +63,7 @@ fun SignupScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = {Text(text = stringResource(id = R.string.login))},
+                    title = { Text(text = stringResource(id = R.string.login)) },
                     navigationIcon = {
                         IconButton(onClick = onNavigationClick) {
                             Icon(
@@ -91,7 +93,7 @@ fun SignupScreen(
 @Composable
 fun SignupContentScreen(
     modifier: Modifier = Modifier,
-    onNavigateToHome:()-> Unit,
+    onNavigateToHome: () -> Unit,
     viewModel: SignupViewModel
 ) {
     Surface(modifier = modifier.fillMaxSize()) {
@@ -116,7 +118,7 @@ fun SignupContentScreen(
 
                 LaunchedEffect(key1 = uiState.goToHome) {
 
-                    if(uiState.goToHome){
+                    if (uiState.goToHome) {
                         onNavigateToHome()
                         viewModel.reset()
                     }
@@ -140,30 +142,33 @@ fun SignupContentScreen(
                 KingTextTitle(text = stringResource(id = R.string.sign_up))
 
                 KingTextField(
-                    value = viewModel.email,
+                    value = viewModel.formState.email.field,
+                    error = viewModel.formState.email.error,
                     label = R.string.email,
                     placeholder = R.string.hint_email,
                     keyBoardType = KeyboardType.Email,
                     imeAction = ImeAction.Next,
                     modifier = Modifier
                 ) {
-
+                    viewModel.updateEmail(it)
                 }
 
                 KingTextField(
-                    value = viewModel.name,
+                    value = viewModel.formState.name.field,
                     label = R.string.name,
+                    error = viewModel.formState.name.error,
                     placeholder = R.string.hint_name,
                     keyBoardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
                     modifier = Modifier
                 ) {
-
+                    viewModel.updateName(it)
                 }
 
                 KingTextField(
-                    value = viewModel.password,
+                    value = viewModel.formState.password.field,
                     label = R.string.password,
+                    error = viewModel.formState.password.error,
                     placeholder = R.string.hint_password,
                     keyBoardType = KeyboardType.Password,
                     imeAction = ImeAction.Next,
@@ -186,10 +191,13 @@ fun SignupContentScreen(
                     }
                 ) {
 
+                    viewModel.updatePassword(it)
+
                 }
 
                 KingTextField(
-                    value = viewModel.confirmPassword,
+                    value = viewModel.formState.confirmPassword.field,
+                    error = viewModel.formState.confirmPassword.error,
                     label = R.string.confirm_password,
                     placeholder = R.string.hint_confirm_password,
                     keyBoardType = KeyboardType.Password,
@@ -213,10 +221,16 @@ fun SignupContentScreen(
                     }
                 ) {
 
+                    viewModel.updateConfirm(it)
+
                 }
 
                 KingTextField(
-                    value = viewModel.documento,
+                    value = TextFieldValue(
+                        text = viewModel.formState.document.field,
+                        selection = TextRange(viewModel.formState.document.field.length)
+                    ),
+                    error = viewModel.formState.document.error,
                     label = R.string.documento,
                     placeholder = R.string.hint_documento,
                     keyBoardType = KeyboardType.Number,
@@ -224,10 +238,12 @@ fun SignupContentScreen(
                     modifier = Modifier
                 ) {
 
+                    viewModel.updateDocument(it.text)
+
                 }
 
                 KingTextField(
-                    value = viewModel.birthdate,
+                    value = "",
                     label = R.string.birthdate,
                     placeholder = R.string.hint_birthdate,
                     keyBoardType = KeyboardType.Number,
