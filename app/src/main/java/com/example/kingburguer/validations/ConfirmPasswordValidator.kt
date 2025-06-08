@@ -2,7 +2,7 @@ package com.example.kingburguer.validations
 
 import com.example.kingburguer.R
 
-class ConfirmPassword {
+class ConfirmPasswordValidator {
 
     companion object {
 
@@ -12,7 +12,7 @@ class ConfirmPassword {
 
             }
 
-            if (confirmPassword != password) {
+            if (password.isNotBlank() && confirmPassword != password) {
                 return ResourceString(input = R.string.error_confirm_password_invalid)
             }
 

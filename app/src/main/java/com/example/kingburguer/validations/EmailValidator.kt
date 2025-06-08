@@ -13,7 +13,7 @@ class EmailValidator {
             }
 
             if (!isEmailValid(email)) {
-                return RawString(input = "E-mail inválido. Verifique o campo novamente.")
+                return ResourceString(input = R.string.error_email_invalid)
             }
 
             return null

@@ -5,6 +5,7 @@ import com.example.kingburguer.validations.TextString
 data class FieldState(
     val field: String = "",
     val error: TextString? = null,
+    val isValid: Boolean = false
 )
 
 data class FormState(
@@ -14,4 +15,5 @@ data class FormState(
     val confirmPassword: FieldState = FieldState(),
     val document: FieldState = FieldState(),
     val birthdate: FieldState = FieldState(),
+    val formIsValid: Boolean = false
 )

@@ -9,7 +9,7 @@ import com.example.kingburguer.composes.signup.FieldState
 import com.example.kingburguer.composes.signup.FormState
 import com.example.kingburguer.composes.signup.SignupUiState
 import com.example.kingburguer.validations.BirthdateValidator
-import com.example.kingburguer.validations.ConfirmPassword
+import com.example.kingburguer.validations.ConfirmPasswordValidator
 import com.example.kingburguer.validations.DocumentValidator
 import com.example.kingburguer.validations.EmailValidator
 import com.example.kingburguer.validations.NameValidator
@@ -33,26 +33,77 @@ class SignupViewModel : ViewModel() {
 
         val errorMessage = EmailValidator.validate(email)
 
-        formState = formState.copy(email = FieldState(field = email, error = errorMessage))
+        formState = formState.copy(
+            email = FieldState(
+                field = email,
+                error = errorMessage,
+                isValid = errorMessage == null
+            )
+        )
+
+        updateButton()
     }
 
     fun updateName(name: String) {
         val errorMessage = NameValidator.validate(name)
-        formState = formState.copy(name = FieldState(field = name, error = errorMessage))
+        formState = formState.copy(
+            name = FieldState(
+                field = name,
+                error = errorMessage,
+                isValid = errorMessage == null
+            )
+        )
+        updateButton()
+
     }
 
     fun updatePassword(password: String) {
 
-        val errorMessage = PasswordValidator.validate(password)
-        formState = formState.copy(password = FieldState(field = password, error = errorMessage))
+        var errorMessage = PasswordValidator.validate(password)
+        formState = formState.copy(
+            password = FieldState(
+                field = password,
+                error = errorMessage,
+                isValid = errorMessage == null
+            )
+        )
+
+        errorMessage = ConfirmPasswordValidator.validate(formState.confirmPassword.field, password )
+        formState = formState.copy(
+            confirmPassword = FieldState(
+                field = formState.confirmPassword.field,
+                error = errorMessage,
+                isValid = errorMessage == null
+            )
+        )
+        updateButton()
+
     }
 
     fun updateConfirm(password: String) {
 
-        val errorMessage = ConfirmPassword.validate(password, formState.password.field)
+        var errorMessage = ConfirmPasswordValidator.validate(password, formState.password.field)
 
         formState =
-            formState.copy(confirmPassword = FieldState(field = password, error = errorMessage))
+            formState.copy(
+                confirmPassword = FieldState(
+                    field = password,
+                    error = errorMessage,
+                    isValid = errorMessage == null
+                )
+            )
+
+        errorMessage = PasswordValidator.validate(formState.password.field)
+        formState = formState.copy(
+            password = FieldState(
+                field = formState.password.field,
+                error = errorMessage,
+                isValid = errorMessage == null
+            )
+        )
+
+        updateButton()
+
     }
 
     fun updateDocument(document: String) {
@@ -63,8 +114,14 @@ class SignupViewModel : ViewModel() {
         val errorMessage = DocumentValidator.validate(result, pattern)
 
         formState = formState.copy(
-            document = FieldState(field = result, error = errorMessage)
+            document = FieldState(
+                field = result,
+                error = errorMessage,
+                isValid = errorMessage == null
+            )
         )
+        updateButton()
+
 
     }
 
@@ -74,10 +131,32 @@ class SignupViewModel : ViewModel() {
         val currentBirthdate = formState.birthdate.field
         val result = mask(pattern, currentBirthdate, value)
 
-        val messageError = BirthdateValidator.validate(result, pattern)
+        val errorMessage = BirthdateValidator.validate(result, pattern)
 
         formState = formState.copy(
-            birthdate = FieldState(field = result, error = messageError)
+            birthdate = FieldState(
+                field = result,
+                error = errorMessage,
+                isValid = errorMessage == null
+            )
+        )
+        updateButton()
+
+    }
+
+
+    private fun updateButton() {
+        val formIsValid = with(formState) {
+            email.isValid &&
+                    name.isValid &&
+                    password.isValid &&
+                    confirmPassword.isValid &&
+                    document.isValid &&
+                    birthdate.isValid
+        }
+
+        formState = formState.copy(
+            formIsValid = formIsValid
         )
     }
 
@@ -95,7 +174,6 @@ class SignupViewModel : ViewModel() {
         }
 
     }
-
 
     fun reset() {
         _uiState.update {

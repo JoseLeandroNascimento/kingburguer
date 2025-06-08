@@ -1,8 +1,6 @@
 package com.example.kingburguer.validations
 
-import android.util.Patterns
 import com.example.kingburguer.R
-import com.example.kingburguer.composes.signup.FieldState
 
 class PasswordValidator {
 
