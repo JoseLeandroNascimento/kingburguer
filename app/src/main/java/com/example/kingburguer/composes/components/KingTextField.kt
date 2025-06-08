@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -38,10 +39,10 @@ fun KingTextField(
     imeAction: ImeAction = ImeAction.Next,
     trailingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (String) -> Unit
-){
+) {
     KingTextField(
         modifier = modifier,
-        value = TextFieldValue(text = value),
+        value = TextFieldValue(text = value, selection = TextRange(value.length)),
         label = label,
         error = error,
         trailingIcon = trailingIcon,
@@ -49,7 +50,7 @@ fun KingTextField(
         obfuscate = obfuscate,
         keyBoardType = keyBoardType,
         imeAction = imeAction
-    ){
+    ) {
         onValueChange(it.text)
     }
 }

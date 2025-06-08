@@ -1,8 +1,10 @@
 package com.example.kingburguer.composes.signup
 
+import com.example.kingburguer.validations.TextString
+
 data class FieldState(
     val field: String = "",
-    val error: String? = null,
+    val error: TextString? = null,
 )
 
 data class FormState(

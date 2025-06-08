@@ -1,6 +1,5 @@
 package com.example.kingburguer.viewmodels
 
-import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,6 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.kingburguer.composes.signup.FieldState
 import com.example.kingburguer.composes.signup.FormState
 import com.example.kingburguer.composes.signup.SignupUiState
+import com.example.kingburguer.validations.BirthdateValidator
+import com.example.kingburguer.validations.ConfirmPassword
+import com.example.kingburguer.validations.DocumentValidator
+import com.example.kingburguer.validations.EmailValidator
+import com.example.kingburguer.validations.NameValidator
+import com.example.kingburguer.validations.PasswordValidator
 import com.example.kingburguer.validations.mask
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,10 +21,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class SignupViewModel : ViewModel() {
 
@@ -30,134 +31,39 @@ class SignupViewModel : ViewModel() {
 
     fun updateEmail(email: String) {
 
-        if (email.isBlank()) {
-            formState = formState.copy(
-                email = FieldState(
-                    field = email,
-                    error = "Campo e-mail não pode ser vazio"
-                )
-            )
-            return
-        }
+        val errorMessage = EmailValidator.validate(email)
 
-        if (!isEmailValid(email)) {
-            formState = formState.copy(
-                email = FieldState(
-                    field = email,
-                    error = "E-mail inválido. Verifique o campo novamente."
-                )
-            )
-            return
-
-        }
-
-        formState = formState.copy(email = FieldState(field = email, error = null))
+        formState = formState.copy(email = FieldState(field = email, error = errorMessage))
     }
 
     fun updateName(name: String) {
-
-        if (name.isBlank()) {
-            formState = formState.copy(
-                name = FieldState(
-                    field = name,
-                    error = "Campo nome não pode ser vazio"
-                )
-            )
-            return
-        }
-
-        if (name.length < 3) {
-            formState = formState.copy(
-                name = FieldState(
-                    field = name,
-                    error = "Nome deve ter 3 letras ou mais"
-                )
-            )
-            return
-
-        }
-
-        formState = formState.copy(name = FieldState(field = name, error = null))
+        val errorMessage = NameValidator.validate(name)
+        formState = formState.copy(name = FieldState(field = name, error = errorMessage))
     }
 
     fun updatePassword(password: String) {
 
-        if (password.isBlank()) {
-            formState = formState.copy(
-                password = FieldState(
-                    field = password,
-                    error = "Campo senha não pode ser vazio"
-                )
-            )
-            return
-        }
-
-        if (password.length < 8) {
-            formState = formState.copy(
-                password = FieldState(
-                    field = password,
-                    error = "Senha deve ter 8 letras ou mais"
-                )
-            )
-            return
-        }
-
-        formState = formState.copy(password = FieldState(field = password, error = null))
+        val errorMessage = PasswordValidator.validate(password)
+        formState = formState.copy(password = FieldState(field = password, error = errorMessage))
     }
 
     fun updateConfirm(password: String) {
 
-        if (password.isBlank()) {
-            formState = formState.copy(
-                confirmPassword = FieldState(
-                    field = password,
-                    error = "Campo confirmar senha não pode ser vazio"
-                )
-            )
-            return
-        }
+        val errorMessage = ConfirmPassword.validate(password, formState.password.field)
 
-        if (password != formState.password.field) {
-            formState = formState.copy(
-                confirmPassword = FieldState(
-                    field = password,
-                    error = "O confirmar senha devem ser iguail à senha"
-                )
-            )
-            return
-        }
-
-        formState = formState.copy(confirmPassword = FieldState(field = password, error = null))
+        formState =
+            formState.copy(confirmPassword = FieldState(field = password, error = errorMessage))
     }
 
     fun updateDocument(document: String) {
 
-        val pattern = "###.###.###-##"
         val currentDocument = formState.document.field
+        val pattern = "###.###.###-##"
         val result = mask(pattern, currentDocument, document)
-
-        if (result.isBlank()) {
-            formState = formState.copy(
-                document = FieldState(
-                    field = result,
-                    error = "Campo CPF não pode ser vazio"
-                )
-            )
-            return
-        }
-
-        if (result.length != pattern.length) {
-            formState = formState.copy(
-                document = FieldState(
-                    field = result,
-                    error = "CPF inválido"
-                )
-            )
-            return
-        }
+        val errorMessage = DocumentValidator.validate(result, pattern)
 
         formState = formState.copy(
-            document = FieldState(field = result, error = null)
+            document = FieldState(field = result, error = errorMessage)
         )
 
     }
@@ -168,40 +74,10 @@ class SignupViewModel : ViewModel() {
         val currentBirthdate = formState.birthdate.field
         val result = mask(pattern, currentBirthdate, value)
 
-        if (result.length != pattern.length) {
-            formState = formState.copy(
-                birthdate = FieldState(field = result, error = "Data de nascimento inválida")
-            )
-            return
-        }
-
-        try {
-            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).run {
-                isLenient = false
-                parse(result)
-            }?.also {
-
-                val now = Date()
-                if (it.after(now)) {
-                    formState = formState.copy(
-                        birthdate = FieldState(
-                            field = result,
-                            error = "Data de nascimento não pode ser futura"
-                        )
-                    )
-                    return
-                }
-            }
-
-        } catch (e: ParseException) {
-            formState = formState.copy(
-                birthdate = FieldState(field = result, error = "Data de nascimento inválida")
-            )
-            return
-        }
+        val messageError = BirthdateValidator.validate(result, pattern)
 
         formState = formState.copy(
-            birthdate = FieldState(field = result, error = null)
+            birthdate = FieldState(field = result, error = messageError)
         )
     }
 
@@ -220,9 +96,6 @@ class SignupViewModel : ViewModel() {
 
     }
 
-    private fun isEmailValid(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
 
     fun reset() {
         _uiState.update {

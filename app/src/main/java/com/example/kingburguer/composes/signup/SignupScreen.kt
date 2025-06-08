@@ -143,7 +143,7 @@ fun SignupContentScreen(
 
                 KingTextField(
                     value = viewModel.formState.email.field,
-                    error = viewModel.formState.email.error,
+                    error = viewModel.formState.email.error?.value,
                     label = R.string.email,
                     placeholder = R.string.hint_email,
                     keyBoardType = KeyboardType.Email,
@@ -156,7 +156,7 @@ fun SignupContentScreen(
                 KingTextField(
                     value = viewModel.formState.name.field,
                     label = R.string.name,
-                    error = viewModel.formState.name.error,
+                    error = viewModel.formState.name.error?.value,
                     placeholder = R.string.hint_name,
                     keyBoardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
@@ -168,7 +168,7 @@ fun SignupContentScreen(
                 KingTextField(
                     value = viewModel.formState.password.field,
                     label = R.string.password,
-                    error = viewModel.formState.password.error,
+                    error = viewModel.formState.password.error?.value,
                     placeholder = R.string.hint_password,
                     keyBoardType = KeyboardType.Password,
                     imeAction = ImeAction.Next,
@@ -197,7 +197,7 @@ fun SignupContentScreen(
 
                 KingTextField(
                     value = viewModel.formState.confirmPassword.field,
-                    error = viewModel.formState.confirmPassword.error,
+                    error = viewModel.formState.confirmPassword.error?.value,
                     label = R.string.confirm_password,
                     placeholder = R.string.hint_confirm_password,
                     keyBoardType = KeyboardType.Password,
@@ -230,7 +230,7 @@ fun SignupContentScreen(
                         text = viewModel.formState.document.field,
                         selection = TextRange(viewModel.formState.document.field.length)
                     ),
-                    error = viewModel.formState.document.error,
+                    error = viewModel.formState.document.error?.value,
                     label = R.string.documento,
                     placeholder = R.string.hint_documento,
                     keyBoardType = KeyboardType.Number,
@@ -247,7 +247,7 @@ fun SignupContentScreen(
                         text = viewModel.formState.birthdate.field,
                         selection = TextRange(index = viewModel.formState.birthdate.field.length)
                     ),
-                    error = viewModel.formState.birthdate.error,
+                    error = viewModel.formState.birthdate.error?.value,
                     label = R.string.birthdate,
                     placeholder = R.string.hint_birthdate,
                     keyBoardType = KeyboardType.Number,

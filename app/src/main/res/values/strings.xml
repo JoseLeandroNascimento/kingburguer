@@ -18,4 +18,16 @@
     <string name="hint_birthdate">Digite sua data de nascimento</string>
     <string name="name">Nome</string>
     <string name="hint_name">Digite seu nome</string>
+    <string name="error_email_blank">Campo e-mail não pode ser vazio</string>
+    <string name="error_email_invalid">E-mail inválido. Verifique o campo novamente.</string>
+    <string name="error_name_blank">Campo nome não pode ser vazio</string>
+    <string name="error_name_invalid">Nome deve ter 3 letras ou mais</string>
+    <string name="error_password_blanck">Campo senha não pode ser vazio</string>
+    <string name="error_password_invalid">Senha deve ter 8 letras ou mais</string>
+    <string name="error_confirm_password_blank">Campo confirmar senha não pode ser vazio</string>
+    <string name="error_confirm_password_invalid">O confirmar senha devem ser iguail à senha</string>
+    <string name="error_document_blank">Campo CPF não pode ser vazio</string>
+    <string name="error_document_invalid">CPF inválido</string>
+    <string name="error_birhdate_blank">Data de nascimento inválida</string>
+    <string name="error_birhdate_after">Data de nascimento não pode ser futura</string>
 </resources>
