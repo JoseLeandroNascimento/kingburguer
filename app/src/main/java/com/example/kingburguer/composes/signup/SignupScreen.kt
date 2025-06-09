@@ -260,7 +260,8 @@ fun SignupContentScreen(
 
 
                 KingButton(
-                    enable = viewModel.formState.formIsValid,
+//                    enable = viewModel.formState.formIsValid,
+                    enable = true,
                     loading = uiState.isLoading,
                     text = stringResource(R.string.sign_up)
                 ) {

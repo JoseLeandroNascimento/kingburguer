@@ -1,13 +1,16 @@
 package com.example.kingburguer.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kingburguer.api.KingBurguerService
 import com.example.kingburguer.composes.signup.FieldState
 import com.example.kingburguer.composes.signup.FormState
 import com.example.kingburguer.composes.signup.SignupUiState
+import com.example.kingburguer.data.UserRequest
 import com.example.kingburguer.validations.BirthdateValidator
 import com.example.kingburguer.validations.ConfirmPasswordValidator
 import com.example.kingburguer.validations.DocumentValidator
@@ -21,6 +24,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.text.SimpleDateFormat
+import java.util.Locale
+import kotlin.coroutines.CoroutineContext
 
 class SignupViewModel : ViewModel() {
 
@@ -68,7 +76,7 @@ class SignupViewModel : ViewModel() {
             )
         )
 
-        errorMessage = ConfirmPasswordValidator.validate(formState.confirmPassword.field, password )
+        errorMessage = ConfirmPasswordValidator.validate(formState.confirmPassword.field, password)
         formState = formState.copy(
             confirmPassword = FieldState(
                 field = formState.confirmPassword.field,
@@ -166,10 +174,39 @@ class SignupViewModel : ViewModel() {
         }
 
         viewModelScope.launch {
-            delay(3000)
+
+            val services = KingBurguerService.create()
+
+            try {
+
+                with(formState) {
+
+                    val date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(birthdate.field)
+                    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date!!)
+
+                    val userRequest = UserRequest(
+                        name = name.field,
+                        email = email.field,
+                        password = password.field,
+                        document = document.field,
+                        birthday = dateFormat
+                    )
+                    val service = KingBurguerService.create()
+                    val content = service.postUser(userRequest)
+                }
+
+
+            } catch (e: HttpException) {
+
+                val content = e.response()?.errorBody()?.string()
+                _uiState.update {
+                    it.copy(isLoading = false, error = content)
+                }
+            }
+
 
             _uiState.update {
-                it.copy(isLoading = false, goToHome = true)
+                it.copy(isLoading = false, goToHome = false)
             }
         }
 

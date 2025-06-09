@@ -41,7 +41,9 @@ android {
 
 dependencies {
 
-
+    implementation(libs.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.icons)
     implementation(libs.androidx.core.ktx)
