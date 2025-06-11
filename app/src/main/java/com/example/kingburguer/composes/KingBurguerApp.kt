@@ -28,8 +28,8 @@ fun KingBurguerNavHost(modifier: Modifier = Modifier, navController: NavHostCont
                     navController.navigate(Screen.SIGNUP.route)
                 },
                 onNavigateToHome = {
-                    navController.navigate(Screen.HOME.route){
-                        popUpTo(Screen.LOGIN.route){ inclusive = true}
+                    navController.navigate(Screen.HOME.route) {
+                        popUpTo(Screen.LOGIN.route) { inclusive = true }
                     }
                 }
             )
@@ -40,10 +40,8 @@ fun KingBurguerNavHost(modifier: Modifier = Modifier, navController: NavHostCont
                 onNavigationClick = {
                     navController.navigateUp()
                 },
-                onNavigateToHome = {
-                    navController.navigate(Screen.HOME.route){
-                        popUpTo(Screen.LOGIN.route){ inclusive = true}
-                    }
+                onNavigateToLogin = {
+                    navController.navigateUp()
                 }
             )
         }

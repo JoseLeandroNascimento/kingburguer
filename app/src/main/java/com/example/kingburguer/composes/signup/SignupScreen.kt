@@ -52,8 +52,8 @@ import com.example.kingburguer.viewmodels.SignupViewModel
 fun SignupScreen(
     modifier: Modifier = Modifier,
     onNavigationClick: () -> Unit,
-    onNavigateToHome: () -> Unit,
-    viewModel: SignupViewModel = viewModel(),
+    onNavigateToLogin: () -> Unit,
+    viewModel: SignupViewModel = viewModel(factory = SignupViewModel.factory),
 
     ) {
 
@@ -82,7 +82,7 @@ fun SignupScreen(
         ) { contentPadding ->
             SignupContentScreen(
                 viewModel = viewModel,
-                onNavigateToHome = onNavigateToHome,
+                onNavigateToLogin = onNavigateToLogin,
                 modifier = Modifier.padding(top = contentPadding.calculateTopPadding())
             )
         }
@@ -93,7 +93,7 @@ fun SignupScreen(
 @Composable
 fun SignupContentScreen(
     modifier: Modifier = Modifier,
-    onNavigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit,
     viewModel: SignupViewModel
 ) {
     Surface(modifier = modifier.fillMaxSize()) {
@@ -116,12 +116,19 @@ fun SignupContentScreen(
 
                 ) {
 
-                LaunchedEffect(key1 = uiState.goToHome) {
 
-                    if (uiState.goToHome) {
-                        onNavigateToHome()
-                        viewModel.reset()
-                    }
+                if (uiState.goToLogin) {
+
+                    KingAlert(
+                        onDismissRequest = {},
+                        onConfirmation = {
+                            onNavigateToLogin()
+                            viewModel.reset()
+                        },
+                        dialogTitle = stringResource(id = R.string.app_name),
+                        dialogText = stringResource(id = R.string.user_created),
+                        icon = Icons.Filled.Info
+                    )
                 }
 
                 uiState.error?.let { error ->
@@ -258,10 +265,8 @@ fun SignupContentScreen(
                     viewModel.updateBirthdate(it.text)
                 }
 
-
                 KingButton(
-//                    enable = viewModel.formState.formIsValid,
-                    enable = true,
+                    enable = viewModel.formState.formIsValid,
                     loading = uiState.isLoading,
                     text = stringResource(R.string.sign_up)
                 ) {
@@ -287,7 +292,7 @@ private fun SignupScreenLightPreview() {
         darkTheme = false,
         dynamicColor = false
     ) {
-        SignupScreen(onNavigationClick = {}, onNavigateToHome = {})
+        SignupScreen(onNavigationClick = {}, onNavigateToLogin = {})
     }
 }
 
@@ -298,6 +303,6 @@ private fun SignupScreenDarkPreview() {
         darkTheme = true,
         dynamicColor = false
     ) {
-        SignupScreen(onNavigationClick = {}, onNavigateToHome = {})
+        SignupScreen(onNavigationClick = {}, onNavigateToLogin = {})
     }
 }
