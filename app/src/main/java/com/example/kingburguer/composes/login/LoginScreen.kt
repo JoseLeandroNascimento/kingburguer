@@ -46,7 +46,7 @@ import com.example.kingburguer.viewmodels.LoginViewModel
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    loginViewModel: LoginViewModel = viewModel(),
+    loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.factory),
     onNavigateToHome: () -> Unit,
     onSignup: () -> Unit
 ) {
@@ -95,7 +95,8 @@ fun LoginScreen(
                 KingTextTitle(text = stringResource(id = R.string.login))
 
                 KingTextField(
-                    value = loginViewModel.email,
+                    value = loginViewModel.formState.email.field,
+                    error = loginViewModel.formState.email.error?.value,
                     label = R.string.email,
                     placeholder = R.string.hint_email,
                     keyBoardType = KeyboardType.Email,
@@ -103,10 +104,13 @@ fun LoginScreen(
                     modifier = Modifier
                 ) {
 
+                    loginViewModel.updateEmail(it)
+
                 }
 
                 KingTextField(
-                    value = loginViewModel.password,
+                    value = loginViewModel.formState.password.field,
+                    error = loginViewModel.formState.password.error?.value,
                     label = R.string.password,
                     placeholder = R.string.hint_password,
                     keyBoardType = KeyboardType.Password,
@@ -130,6 +134,8 @@ fun LoginScreen(
                     }
                 ) {
 
+                    loginViewModel.updatePassword(it)
+
                 }
 
                 Row(
@@ -137,12 +143,14 @@ fun LoginScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Checkbox(checked = true, onCheckedChange = {})
+                    Checkbox(checked = loginViewModel.formState.rememberMe, onCheckedChange = {
+                        loginViewModel.updateRememberMe(it)
+                    })
                     Text(text = stringResource(id = R.string.remember_me))
                 }
 
                 KingButton(
-                    enable = true,
+                    enable = loginViewModel.formState.formIsValid,
                     loading = uiState.isLoading,
                     text = stringResource(R.string.send)
                 ) {

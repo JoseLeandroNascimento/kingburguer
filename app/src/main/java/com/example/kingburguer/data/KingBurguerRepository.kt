@@ -7,6 +7,31 @@ class KingBurguerRepository(
     private val service: KingBurguerService
 ) {
 
+    suspend fun login(loginRequest: LoginRequest): LoginResponse {
+
+        try {
+
+            val response = service.login(loginRequest)
+
+            if (!response.isSuccessful) {
+                val errorData = response.errorBody()?.string()?.let {
+                    Gson().fromJson(it, LoginResponse.ErrorAuth::class.java)
+                }
+                return errorData ?: LoginResponse.Error("Internal server error")
+            }
+
+            val data = response.body()?.string()?.let {
+                Gson().fromJson(it, LoginResponse.Success::class.java)
+            }
+
+            return data ?: LoginResponse.Error("Unexpected response success")
+
+        } catch (e: Exception) {
+
+            return LoginResponse.Error(e.message ?: "Unexpected exceptions")
+        }
+    }
+
     suspend fun postUser(userRequest: UserRequest): UserCreateResponse {
 
         val response = service.postUser(userRequest)
