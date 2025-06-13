@@ -7,7 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.kingburguer.composes.home.MainScreen
 import com.example.kingburguer.composes.login.LoginScreen
 import com.example.kingburguer.composes.signup.SignupScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
@@ -21,7 +20,7 @@ fun KingBurguerApp() {
 @Composable
 fun KingBurguerNavHost(modifier: Modifier = Modifier, navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = Screen.LOGIN.route) {
+    NavHost(navController = navController, startDestination = Screen.MAIN.route) {
         composable(Screen.LOGIN.route) {
             LoginScreen(
                 onSignup = {
@@ -46,7 +45,7 @@ fun KingBurguerNavHost(modifier: Modifier = Modifier, navController: NavHostCont
             )
         }
 
-        composable(Screen.HOME.route) {
+        composable(Screen.MAIN.route) {
             MainScreen()
         }
     }

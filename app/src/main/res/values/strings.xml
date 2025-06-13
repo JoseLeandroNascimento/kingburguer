@@ -34,4 +34,5 @@
     <string name="menu_home">Início</string>
     <string name="menu_coupon">Cupom</string>
     <string name="menu_profile">Perfil</string>
+    <string name="get_coupon">Resgatar cupom</string>
 </resources>
