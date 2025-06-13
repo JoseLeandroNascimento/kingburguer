@@ -31,4 +31,7 @@
     <string name="error_birhdate_blank">Data de nascimento inválida</string>
     <string name="error_birhdate_after">Data de nascimento não pode ser futura</string>
     <string name="user_created">Usuário criado com sucesso!</string>
+    <string name="menu_home">Início</string>
+    <string name="menu_coupon">Cupom</string>
+    <string name="menu_profile">Perfil</string>
 </resources>

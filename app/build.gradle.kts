@@ -43,6 +43,7 @@ android {
 dependencies {
 
     implementation(libs.gson)
+    implementation(libs.androidx.material)
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit)
     implementation(libs.androidx.navigation.compose)
