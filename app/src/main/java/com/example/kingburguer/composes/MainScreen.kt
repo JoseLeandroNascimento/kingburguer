@@ -22,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +35,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.kingburguer.R
 import com.example.kingburguer.composes.home.HomeScreen
+import com.example.kingburguer.composes.product.ProductScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,6 +51,15 @@ import com.example.kingburguer.ui.theme.KingburguerTheme
 fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     var titleTopBarId by remember { mutableIntStateOf(R.string.menu_home) }
+
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry.value?.destination?.route
+
+    LaunchedEffect(currentRoute) {
+        if (currentRoute == Screen.HOME.route) {
+            titleTopBarId = R.string.menu_home
+        }
+    }
 
     Surface(
         modifier = modifier.fillMaxSize()
@@ -119,16 +132,25 @@ fun MainContentScreen(contentPadding: PaddingValues, navHostController: NavHostC
         startDestination = Screen.HOME.route
     ) {
         composable(Screen.HOME.route) {
-            HomeScreen(
-            )
+            HomeScreen() { productId ->
+                navHostController.navigate("${Screen.PRODUCT.route}/$productId")
+            }
         }
         composable(Screen.COUPON.route) {
-            CouponScreen(
-            )
+            CouponScreen()
         }
         composable(Screen.PROFILE.route) {
-            ProfileScreen(
+            ProfileScreen()
+        }
+        composable(
+            route = "${Screen.PRODUCT.route}/{productId}",
+            arguments = listOf(
+                navArgument("productId") {
+                    type = NavType.IntType
+                }
             )
+        ) {
+            ProductScreen()
         }
     }
 }

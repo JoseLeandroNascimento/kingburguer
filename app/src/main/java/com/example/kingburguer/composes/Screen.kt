@@ -7,5 +7,6 @@ enum class Screen(val route: String) {
     MAIN("main"),
     HOME("home"),
     COUPON("coupon"),
-    PROFILE("profile")
+    PROFILE("profile"),
+    PRODUCT("product")
 }

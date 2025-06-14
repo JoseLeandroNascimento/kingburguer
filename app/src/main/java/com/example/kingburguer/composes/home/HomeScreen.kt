@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,7 @@ import com.example.kingburguer.ui.theme.KingburguerTheme
 import com.example.kingburguer.ui.theme.Orange600
 
 data class Product(
+    val id: Int,
     val name: String,
     @DrawableRes val picture: Int = R.drawable.example,
     val price: Double = 19.9
@@ -56,37 +58,37 @@ data class Category(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier, onProductClicked: (Int) -> Unit) {
 
     val categories = listOf(
         Category(
             name = "Vegetariano",
             products = listOf(
-                Product(name = "Combo v1"),
-                Product(name = "Combo v2"),
-                Product(name = "Combo v3"),
+                Product(id = 1,name = "Combo v1"),
+                Product(id = 2,name = "Combo v2"),
+                Product(id = 3,name = "Combo v3"),
             )
         ),
         Category(
             name = "Bovina",
             products = listOf(
-                Product(name = "Combo b1 asdfasdasd as d as d as d as da s"),
-                Product(name = "Combo b2"),
-                Product(name = "Combo b3"),
-                Product(name = "Combo b4"),
-                Product(name = "Combo b5"),
-                Product(name = "Combo b6"),
+                Product(id = 4,name = "Combo b1 asdfasdasd as d as d as d as da s"),
+                Product(id = 5,name = "Combo b2"),
+                Product(id = 6,name = "Combo b3"),
+                Product(id = 7,name = "Combo b4"),
+                Product(id = 8,name = "Combo b5"),
+                Product(id = 9,name = "Combo b6"),
             )
         ),
         Category(
             name = "Sobremesa",
             products = listOf(
-                Product(name = "Sobremesa s1"),
-                Product(name = "Sobremesa s2"),
-                Product(name = "Sobremesa s3"),
-                Product(name = "Sobremesa s4"),
-                Product(name = "Sobremesa s5"),
-                Product(name = "Sobremesa s6"),
+                Product(id = 10,name = "Sobremesa s1"),
+                Product(id = 11,name = "Sobremesa s2"),
+                Product(id = 12,name = "Sobremesa s3"),
+                Product(id = 13,name = "Sobremesa s4"),
+                Product(id = 14,name = "Sobremesa s5"),
+                Product(id = 15,name = "Sobremesa s6"),
             )
         )
     )
@@ -172,7 +174,10 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                                             .border(
                                                 BorderStroke(0.3.dp, color = Color.Gray),
                                                 RoundedCornerShape(8.dp)
-                                            ),
+                                            )
+                                            .clickable {
+                                                onProductClicked(prod.id)
+                                            },
                                         painter = painterResource(id = prod.picture),
                                         contentDescription = prod.name
                                     )
@@ -218,7 +223,7 @@ private fun HomeScreenLightPreview() {
         dynamicColor = false,
         darkTheme = false
     ) {
-        HomeScreen()
+        HomeScreen(onProductClicked = {})
 
     }
 }
@@ -231,6 +236,6 @@ private fun HomeScreenDarkPreview() {
         dynamicColor = false,
         darkTheme = true
     ) {
-        HomeScreen()
+        HomeScreen(onProductClicked = {})
     }
 }
