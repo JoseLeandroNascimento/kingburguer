@@ -20,14 +20,11 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -48,7 +45,7 @@ import com.example.kingburguer.ui.theme.Orange600
 
 data class Product(
     val name: String,
-    @DrawableRes val picture: Int = R.drawable.lanche,
+    @DrawableRes val picture: Int = R.drawable.example,
     val price: Double = 19.9
 )
 
@@ -113,7 +110,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .height(230.dp)
                         .background(Color.Blue),
-                    painter = painterResource(R.drawable.lanche),
+                    painter = painterResource(R.drawable.highlight),
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )

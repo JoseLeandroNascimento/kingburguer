@@ -7,20 +7,29 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -36,18 +45,58 @@ import com.example.kingburguer.ui.theme.KingburguerTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+    var titleTopBarId by remember { mutableIntStateOf(R.string.menu_home) }
+
     Surface(
         modifier = modifier.fillMaxSize()
     ) {
 
-        val navController = rememberNavController()
-
         Scaffold(
             topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(id = titleTopBarId),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                    },
+                    navigationIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.logo),
+                            tint = Color.Unspecified,
+                            contentDescription = ""
+                        )
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
+                    actions = {
+                        IconButton(onClick = {}) {
+                            Icon(
+                                imageVector = Icons.Filled.Person,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
 
+                        IconButton(onClick = {}) {
+                            Icon(
+                                imageVector = Icons.Filled.PowerSettingsNew,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
+                )
             },
             bottomBar = {
-                MainBottomNavigation(navController = navController)
+                MainBottomNavigation(navController = navController) { titleId ->
+
+                    titleTopBarId = titleId
+                }
             }
         ) { contentPadding ->
 
@@ -93,7 +142,8 @@ data class NavigationItem(
 
 @Composable
 fun MainBottomNavigation(
-    navController: NavHostController
+    navController: NavHostController,
+    onNavigationChange: (Int) -> Unit
 ) {
 
 
@@ -135,6 +185,8 @@ fun MainBottomNavigation(
                             launchSingleTop = true
                             restoreState = true
                         }
+
+                        onNavigationChange(item.title)
                     }
                 },
                 label = {
