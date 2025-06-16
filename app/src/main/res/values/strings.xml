@@ -35,4 +35,9 @@
     <string name="menu_coupon">Cupom</string>
     <string name="menu_profile">Perfil</string>
     <string name="get_coupon">Resgatar cupom</string>
+    <string name="prop_id">Indentificador</string>
+    <string name="prop_name">Nome</string>
+    <string name="prop_email">E-mail</string>
+    <string name="prop_document">Documento</string>
+    <string name="prop_birthday">Data de nascimento</string>
 </resources>

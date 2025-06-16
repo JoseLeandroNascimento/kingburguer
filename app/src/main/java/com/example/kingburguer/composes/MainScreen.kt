@@ -44,6 +44,7 @@ import androidx.navigation.navArgument
 import com.example.kingburguer.R
 import com.example.kingburguer.composes.home.HomeScreen
 import com.example.kingburguer.composes.product.ProductScreen
+import com.example.kingburguer.composes.profile.ProfileScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -234,13 +235,6 @@ fun CouponScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-fun ProfileScreen(modifier: Modifier = Modifier) {
-
-    Surface(modifier = modifier.fillMaxSize()) {
-        Text("Profile screen", style = MaterialTheme.typography.headlineLarge)
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
