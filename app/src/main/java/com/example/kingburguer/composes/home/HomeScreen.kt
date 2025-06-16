@@ -46,7 +46,7 @@ import com.example.kingburguer.ui.theme.Orange600
 
 data class Product(
     val id: Int,
-    val name: String,
+    val name: String = "",
     @DrawableRes val picture: Int = R.drawable.example,
     val price: Double = 19.9
 )
