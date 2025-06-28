@@ -20,7 +20,7 @@ fun KingBurguerApp() {
 @Composable
 fun KingBurguerNavHost(modifier: Modifier = Modifier, navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = Screen.MAIN.route) {
+    NavHost(navController = navController, startDestination = Screen.LOGIN.route) {
         composable(Screen.LOGIN.route) {
             LoginScreen(
                 onSignup = {

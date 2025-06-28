@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -11,6 +12,7 @@ import com.example.kingburguer.api.KingBurguerService
 import com.example.kingburguer.composes.signup.FieldState
 import com.example.kingburguer.composes.signup.FormState
 import com.example.kingburguer.composes.signup.SignupUiState
+import com.example.kingburguer.data.KingBurguerLocalStorage
 import com.example.kingburguer.data.KingBurguerRepository
 import com.example.kingburguer.data.UserCreateResponse
 import com.example.kingburguer.data.UserRequest
@@ -231,8 +233,10 @@ class SignupViewModel(
 
         val factory = viewModelFactory {
             initializer {
+                val application = this[APPLICATION_KEY]!!.applicationContext
                 val service = KingBurguerService.create()
-                val respository = KingBurguerRepository(service)
+                val localStorage = KingBurguerLocalStorage(application)
+                val respository = KingBurguerRepository(service,localStorage)
                 SignupViewModel(respository)
             }
         }

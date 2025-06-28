@@ -42,6 +42,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.gson)
     implementation(libs.androidx.material)
     implementation(libs.logging.interceptor)

@@ -1,9 +1,11 @@
 package com.example.kingburguer.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -11,6 +13,7 @@ import com.example.kingburguer.api.KingBurguerService
 import com.example.kingburguer.composes.login.FormState
 import com.example.kingburguer.composes.login.LoginUiState
 import com.example.kingburguer.composes.signup.FieldState
+import com.example.kingburguer.data.KingBurguerLocalStorage
 import com.example.kingburguer.data.KingBurguerRepository
 import com.example.kingburguer.data.LoginRequest
 import com.example.kingburguer.data.LoginResponse
@@ -30,6 +33,14 @@ class LoginViewModel(
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
     var formState by mutableStateOf(FormState())
 
+    init {
+
+        viewModelScope.launch {
+
+            repository.testFlow.collect { value -> Log.i("teste", value.toString()) }
+        }
+
+    }
 
     fun updateEmail(email: String) {
 
@@ -92,7 +103,7 @@ class LoginViewModel(
                     password = password.field,
                 )
 
-                val response = repository.login(loginRequest)
+                val response = repository.login(loginRequest, rememberMe)
 
                 when (response) {
                     is LoginResponse.Success -> {
@@ -130,8 +141,10 @@ class LoginViewModel(
 
         val factory = viewModelFactory {
             initializer {
+                val application = this[APPLICATION_KEY]!!.applicationContext
                 val service = KingBurguerService.create()
-                val respository = KingBurguerRepository(service)
+                val localStorage = KingBurguerLocalStorage(application)
+                val respository = KingBurguerRepository(service, localStorage)
                 LoginViewModel(respository)
             }
         }
