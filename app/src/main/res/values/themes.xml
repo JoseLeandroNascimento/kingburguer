@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.Kingburguer" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Kingburguer.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Kingburguer</item>
+    </style>
 </resources>

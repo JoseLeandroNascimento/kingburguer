@@ -16,20 +16,16 @@ import com.example.kingburguer.viewmodels.SplashViewModel
 
 @Composable
 fun KingBurguerApp(
-    viewModel: SplashViewModel = viewModel(factory = SplashViewModel.factory)
+    startDestination: Screen
 ) {
+
     val navController = rememberNavController()
 
-    val hasSessionState = viewModel.hasSessionState.collectAsState(null)
+    KingBurguerNavHost(
+        navController = navController,
+        startDestination = startDestination
+    )
 
-    hasSessionState.value?.let { logged ->
-
-        val startDestination = if (logged) Screen.MAIN else Screen.LOGIN
-        KingBurguerNavHost(
-            navController = navController,
-            startDestination = startDestination
-        )
-    }
 
 }
 
@@ -77,6 +73,6 @@ private fun KingBurguerAppPreview() {
     KingburguerTheme(
         dynamicColor = false
     ) {
-        KingBurguerApp()
+        KingBurguerApp(startDestination = Screen.LOGIN)
     }
 }
