@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 private const val USER_CREDENTIALS_NAME = "user_credentials"
@@ -17,17 +18,11 @@ class KingBurguerLocalStorage(context: Context) {
     private val dataStore: DataStore<Preferences> = context.dataStore
 
     val userCredentialsFlow = dataStore.data.map { preferences ->
-        val expires = preferences[EXPIRE_TIMESTAMP] ?: 0
-        val accessToken = preferences[ACCESS_TOKEN] ?: ""
-        val refreshToken = preferences[REFRESH_TOKEN] ?: ""
-        val tokenType = preferences[TOKEN_TYPE] ?: ""
-
-        UserCredentials(
-            accessToken = accessToken,
-            expiresTimestamp = expires,
-            tokenType = tokenType,
-            refreshToken = refreshToken
-        )
+        mapUserCredential(preferences)
+    }
+    
+    suspend fun fetchInitialUserCredential(): UserCredentials {
+        return mapUserCredential(dataStore.data.first().toPreferences())
     }
 
     suspend fun updateUserCredential(userCredentials: UserCredentials) {
@@ -41,6 +36,20 @@ class KingBurguerLocalStorage(context: Context) {
             preferences[TOKEN_TYPE] = userCredentials.tokenType
         }
 
+    }
+
+    private fun mapUserCredential(preferences: Preferences): UserCredentials {
+        val expires = preferences[EXPIRE_TIMESTAMP] ?: 0
+        val accessToken = preferences[ACCESS_TOKEN] ?: ""
+        val refreshToken = preferences[REFRESH_TOKEN] ?: ""
+        val tokenType = preferences[TOKEN_TYPE] ?: ""
+
+        return UserCredentials(
+            accessToken = accessToken,
+            expiresTimestamp = expires,
+            tokenType = tokenType,
+            refreshToken = refreshToken
+        )
     }
 
     companion object {

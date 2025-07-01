@@ -33,14 +33,6 @@ class LoginViewModel(
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
     var formState by mutableStateOf(FormState())
 
-    init {
-
-        viewModelScope.launch {
-
-            repository.testFlow.collect { value -> Log.i("teste", value.toString()) }
-        }
-
-    }
 
     fun updateEmail(email: String) {
 

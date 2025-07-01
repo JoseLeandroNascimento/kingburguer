@@ -8,8 +8,7 @@ class KingBurguerRepository(
     private val localStorage: KingBurguerLocalStorage
 ) {
 
-    val testFlow = localStorage.userCredentialsFlow
-
+    suspend fun fetchInitialCredentials() = localStorage.fetchInitialUserCredential()
 
     suspend fun login(loginRequest: LoginRequest, keepLogged: Boolean): LoginResponse {
 
@@ -30,7 +29,7 @@ class KingBurguerRepository(
 
             if (data == null) return LoginResponse.Error("Unexpected response success")
 
-            if(keepLogged){
+            if (keepLogged) {
 
                 val userCredentials = UserCredentials(
                     data.accessToken,

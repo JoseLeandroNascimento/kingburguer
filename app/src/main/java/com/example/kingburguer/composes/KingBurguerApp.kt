@@ -1,8 +1,10 @@
 package com.example.kingburguer.composes
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,17 +12,35 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kingburguer.composes.login.LoginScreen
 import com.example.kingburguer.composes.signup.SignupScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
+import com.example.kingburguer.viewmodels.SplashViewModel
 
 @Composable
-fun KingBurguerApp() {
+fun KingBurguerApp(
+    viewModel: SplashViewModel = viewModel(factory = SplashViewModel.factory)
+) {
     val navController = rememberNavController()
-    KingBurguerNavHost(navController = navController)
+
+    val hasSessionState = viewModel.hasSessionState.collectAsState(null)
+
+    hasSessionState.value?.let { logged ->
+
+        val startDestination = if (logged) Screen.MAIN else Screen.LOGIN
+        KingBurguerNavHost(
+            navController = navController,
+            startDestination = startDestination
+        )
+    }
+
 }
 
 @Composable
-fun KingBurguerNavHost(modifier: Modifier = Modifier, navController: NavHostController) {
+fun KingBurguerNavHost(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    startDestination: Screen
+) {
 
-    NavHost(navController = navController, startDestination = Screen.LOGIN.route) {
+    NavHost(navController = navController, startDestination = startDestination.route) {
         composable(Screen.LOGIN.route) {
             LoginScreen(
                 onSignup = {
