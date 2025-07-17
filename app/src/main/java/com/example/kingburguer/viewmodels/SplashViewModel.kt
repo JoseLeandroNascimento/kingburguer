@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.kingburguer.api.KingBurguerService
 import com.example.kingburguer.data.KingBurguerLocalStorage
 import com.example.kingburguer.data.KingBurguerRepository
+import com.example.kingburguer.data.LoginResponse
+import com.example.kingburguer.data.RefreshTokenRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,8 +25,18 @@ class SplashViewModel(
 
         viewModelScope.launch {
             with(repository.fetchInitialCredentials()) {
-                _hasSessionState.value =
-                    (accessToken.isNotBlank() && System.currentTimeMillis() < expiresTimestamp)
+
+                _hasSessionState.value = when {
+                    accessToken.isEmpty() -> false
+                    System.currentTimeMillis() < expiresTimestamp -> true
+                    else -> {
+                        val response = repository.refreshToken(RefreshTokenRequest(refreshToken))
+                        when (response) {
+                            is LoginResponse.Success -> true
+                            else -> false
+                        }
+                    }
+                }
             }
         }
     }

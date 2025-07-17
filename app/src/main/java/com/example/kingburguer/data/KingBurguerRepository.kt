@@ -50,6 +50,47 @@ class KingBurguerRepository(
         }
     }
 
+    suspend fun refreshToken(request: RefreshTokenRequest): LoginResponse {
+
+        try {
+
+            val userCredentials = localStorage.fetchInitialUserCredential()
+            val response = service.refreshToken(
+                request,
+                "${userCredentials.tokenType} ${userCredentials.accessToken}"
+            )
+
+            if (!response.isSuccessful) {
+                val errorData = response.errorBody()?.string()?.let {
+                    Gson().fromJson(it, LoginResponse.ErrorAuth::class.java)
+                }
+                return errorData ?: LoginResponse.Error("Internal server error")
+            }
+
+            val data = response.body()?.string()?.let {
+                Gson().fromJson(it, LoginResponse.Success::class.java)
+            }
+
+            if (data == null) return LoginResponse.Error("Unexpected response success")
+
+
+            val newUserCredentials = UserCredentials(
+                data.accessToken,
+                data.refreshToken,
+                data.expiresSeconds.toLong(),
+                data.tokenType
+            )
+
+            localStorage.updateUserCredential(newUserCredentials)
+
+            return data
+
+        } catch (e: Exception) {
+
+            return LoginResponse.Error(e.message ?: "Unexpected exceptions")
+        }
+    }
+
     suspend fun postUser(userRequest: UserRequest): UserCreateResponse {
 
         val response = service.postUser(userRequest)
