@@ -12,9 +12,9 @@ import com.example.kingburguer.api.KingBurguerService
 import com.example.kingburguer.composes.signup.FieldState
 import com.example.kingburguer.composes.signup.FormState
 import com.example.kingburguer.composes.signup.SignupUiState
+import com.example.kingburguer.data.ApiResult
 import com.example.kingburguer.data.KingBurguerLocalStorage
 import com.example.kingburguer.data.KingBurguerRepository
-import com.example.kingburguer.data.UserCreateResponse
 import com.example.kingburguer.data.UserRequest
 import com.example.kingburguer.validations.BirthdateValidator
 import com.example.kingburguer.validations.ConfirmPasswordValidator
@@ -199,21 +199,15 @@ class SignupViewModel(
 
 
                 when (response) {
-                    is UserCreateResponse.Success -> {
+                    is ApiResult.Success -> {
                         _uiState.update {
                             it.copy(isLoading = false, goToLogin = true)
                         }
                     }
 
-                    is UserCreateResponse.ErrorAuth -> {
+                    is ApiResult.Error -> {
                         _uiState.update {
-                            it.copy(isLoading = false, error = response.detail.message)
-                        }
-                    }
-
-                    is UserCreateResponse.Error -> {
-                        _uiState.update {
-                            it.copy(isLoading = false, error = response.detail)
+                            it.copy(isLoading = false, error = response.message)
                         }
                     }
                 }

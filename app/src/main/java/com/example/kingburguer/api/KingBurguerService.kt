@@ -1,7 +1,9 @@
 package com.example.kingburguer.api
 
 import com.example.kingburguer.data.LoginRequest
+import com.example.kingburguer.data.LoginResponse
 import com.example.kingburguer.data.RefreshTokenRequest
+import com.example.kingburguer.data.UserCreateResponse
 import com.example.kingburguer.data.UserRequest
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -21,19 +23,19 @@ interface KingBurguerService {
     suspend fun postUser(
         @Body userRequest: UserRequest,
         @Header("x-secret-key") secretKey: String = "9974958d-ec79-4167-b50c-2af5a9012d88"
-    ): Response<ResponseBody>
+    ): Response<UserCreateResponse>
 
     @POST("auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest,
         @Header("x-secret-key") secretKey: String = "9974958d-ec79-4167-b50c-2af5a9012d88"
-    ): Response<ResponseBody>
+    ): Response<LoginResponse>
 
     @PUT("auth/refresh-token")
     suspend fun refreshToken(
         @Body request: RefreshTokenRequest,
         @Header("Authorization") token: String,
-    ): Response<ResponseBody>
+    ): Response<LoginResponse>
 
 
     companion object {

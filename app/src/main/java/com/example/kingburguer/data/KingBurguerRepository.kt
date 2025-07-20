@@ -2,6 +2,7 @@ package com.example.kingburguer.data
 
 import com.example.kingburguer.api.KingBurguerService
 import com.google.gson.Gson
+import retrofit2.Response
 
 class KingBurguerRepository(
     private val service: KingBurguerService,
@@ -10,113 +11,95 @@ class KingBurguerRepository(
 
     suspend fun fetchInitialCredentials() = localStorage.fetchInitialUserCredential()
 
-    suspend fun login(loginRequest: LoginRequest, keepLogged: Boolean): LoginResponse {
+    suspend fun login(loginRequest: LoginRequest, keepLogged: Boolean): ApiResult<LoginResponse> {
 
-        try {
+        val result = apiCall {
+            service.login(loginRequest)
+        }
 
-            val response = service.login(loginRequest)
-
-            if (!response.isSuccessful) {
-                val errorData = response.errorBody()?.string()?.let {
-                    Gson().fromJson(it, LoginResponse.ErrorAuth::class.java)
-                }
-                return errorData ?: LoginResponse.Error("Internal server error")
-            }
-
-            val data = response.body()?.string()?.let {
-                Gson().fromJson(it, LoginResponse.Success::class.java)
-            }
-
-            if (data == null) return LoginResponse.Error("Unexpected response success")
+        if (result is ApiResult.Success<LoginResponse>) {
 
             if (keepLogged) {
-
-                val userCredentials = UserCredentials(
-                    data.accessToken,
-                    data.refreshToken,
-                    data.expiresSeconds.toLong(),
-                    data.tokenType
-                )
-
-                localStorage.updateUserCredential(userCredentials)
+                updateCredentials((result.data))
             }
-
-
-            return data
-
-        } catch (e: Exception) {
-
-            return LoginResponse.Error(e.message ?: "Unexpected exceptions")
         }
+        return result
+
     }
 
-    suspend fun refreshToken(request: RefreshTokenRequest): LoginResponse {
+
+    suspend fun refreshToken(request: RefreshTokenRequest): ApiResult<LoginResponse> {
 
         try {
 
             val userCredentials = localStorage.fetchInitialUserCredential()
-            val response = service.refreshToken(
-                request,
-                "${userCredentials.tokenType} ${userCredentials.accessToken}"
-            )
-
-            if (!response.isSuccessful) {
-                val errorData = response.errorBody()?.string()?.let {
-                    Gson().fromJson(it, LoginResponse.ErrorAuth::class.java)
-                }
-                return errorData ?: LoginResponse.Error("Internal server error")
+            val response = apiCall {
+                service.refreshToken(
+                    request,
+                    "${userCredentials.tokenType} ${userCredentials.accessToken}"
+                )
             }
 
-            val data = response.body()?.string()?.let {
-                Gson().fromJson(it, LoginResponse.Success::class.java)
+            if (response is ApiResult.Success) {
+
+                updateCredentials((response.data))
             }
 
-            if (data == null) return LoginResponse.Error("Unexpected response success")
-
-
-            val newUserCredentials = UserCredentials(
-                data.accessToken,
-                data.refreshToken,
-                data.expiresSeconds.toLong(),
-                data.tokenType
-            )
-
-            localStorage.updateUserCredential(newUserCredentials)
-
-            return data
+            return response
 
         } catch (e: Exception) {
 
-            return LoginResponse.Error(e.message ?: "Unexpected exceptions")
+            return ApiResult.Error(e.message ?: "Unexpected exceptions")
         }
     }
 
-    suspend fun postUser(userRequest: UserRequest): UserCreateResponse {
 
-        val response = service.postUser(userRequest)
+    suspend fun postUser(userRequest: UserRequest): ApiResult<UserCreateResponse> {
 
+        val response = apiCall {
+            service.postUser(userRequest)
+        }
+
+        return response
+
+    }
+
+    private suspend fun updateCredentials(data: LoginResponse) {
+        val newUserCredentials = UserCredentials(
+            data.accessToken,
+            data.refreshToken,
+            data.expiresSeconds.toLong(),
+            data.tokenType
+        )
+        localStorage.updateUserCredential(newUserCredentials)
+    }
+
+    private suspend fun <T> apiCall(call: suspend () -> Response<T>): ApiResult<T> {
         try {
-            if (!response.isSuccessful) {
 
+            val response = call()
+
+            if (!response.isSuccessful) {
                 val errorData = response.errorBody()?.string()?.let {
                     if (response.code() == 401) {
-                        Gson().fromJson(it, UserCreateResponse.ErrorAuth::class.java)
+                        val errorAuth = Gson().fromJson(it, ErrorAuth::class.java)
+                        ApiResult.Error(errorAuth.detail.message)
                     } else {
-                        Gson().fromJson(it, UserCreateResponse.Error::class.java)
+                        Gson().fromJson(it, ApiResult.Error::class.java)
                     }
                 }
-
-                return errorData ?: UserCreateResponse.Error("Internal server error")
+                return errorData ?: ApiResult.Error("Internal server error")
             }
 
-            val data = response.body()?.string()?.let {
-                Gson().fromJson(it, UserCreateResponse.Success::class.java)
-            }
+            val data = response.body()
 
-            return data ?: UserCreateResponse.Error("Unexpected response success")
+            if (data == null) return ApiResult.Error("Unexpected response success")
+
+            return ApiResult.Success(data)
+
         } catch (e: Exception) {
 
-            return UserCreateResponse.Error(e.message ?: "Unexpected exceptions")
+            return ApiResult.Error(e.message ?: "Unexpected exceptions")
         }
     }
 

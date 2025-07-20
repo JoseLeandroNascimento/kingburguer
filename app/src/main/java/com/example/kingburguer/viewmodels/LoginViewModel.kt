@@ -1,6 +1,5 @@
 package com.example.kingburguer.viewmodels
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,10 +12,10 @@ import com.example.kingburguer.api.KingBurguerService
 import com.example.kingburguer.composes.login.FormState
 import com.example.kingburguer.composes.login.LoginUiState
 import com.example.kingburguer.composes.signup.FieldState
+import com.example.kingburguer.data.ApiResult
 import com.example.kingburguer.data.KingBurguerLocalStorage
 import com.example.kingburguer.data.KingBurguerRepository
 import com.example.kingburguer.data.LoginRequest
-import com.example.kingburguer.data.LoginResponse
 import com.example.kingburguer.validations.EmailValidator
 import com.example.kingburguer.validations.PasswordValidator
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -98,21 +97,15 @@ class LoginViewModel(
                 val response = repository.login(loginRequest, rememberMe)
 
                 when (response) {
-                    is LoginResponse.Success -> {
+                    is ApiResult.Success -> {
                         _uiState.update {
                             it.copy(isLoading = false, goToHome = true)
                         }
                     }
 
-                    is LoginResponse.ErrorAuth -> {
+                    is ApiResult.Error -> {
                         _uiState.update {
-                            it.copy(isLoading = false, error = response.detail.message)
-                        }
-                    }
-
-                    is LoginResponse.Error -> {
-                        _uiState.update {
-                            it.copy(isLoading = false, error = response.detail)
+                            it.copy(isLoading = false, error = response.message)
                         }
                     }
                 }

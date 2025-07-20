@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.kingburguer.api.KingBurguerService
+import com.example.kingburguer.data.ApiResult
 import com.example.kingburguer.data.KingBurguerLocalStorage
 import com.example.kingburguer.data.KingBurguerRepository
-import com.example.kingburguer.data.LoginResponse
 import com.example.kingburguer.data.RefreshTokenRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,7 +32,7 @@ class SplashViewModel(
                     else -> {
                         val response = repository.refreshToken(RefreshTokenRequest(refreshToken))
                         when (response) {
-                            is LoginResponse.Success -> true
+                            is ApiResult.Success -> true
                             else -> false
                         }
                     }
