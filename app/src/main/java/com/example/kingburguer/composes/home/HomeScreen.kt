@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import com.example.kingburguer.R
 import com.example.kingburguer.common.currency
 import com.example.kingburguer.data.CategoryResponse
@@ -183,7 +184,7 @@ fun HomeScreen(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.spacedBy(6.dp)
                                 ) {
-                                    Image(
+                                    AsyncImage(
                                         modifier = Modifier
                                             .size(140.dp, 188.dp)
                                             .border(
@@ -193,7 +194,8 @@ fun HomeScreen(
                                             .clickable {
                                                 onProductClicked(prod.id)
                                             },
-                                        painter = painterResource(id = R.drawable.lanche),
+                                        placeholder = painterResource(id = R.drawable.logo) ,
+                                        model = prod.pictureUrl,
                                         contentDescription = prod.name
                                     )
                                     Text(
