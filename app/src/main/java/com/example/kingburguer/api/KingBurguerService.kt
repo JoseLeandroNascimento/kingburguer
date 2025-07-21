@@ -1,5 +1,6 @@
 package com.example.kingburguer.api
 
+import com.example.kingburguer.data.FeedResponse
 import com.example.kingburguer.data.LoginRequest
 import com.example.kingburguer.data.LoginResponse
 import com.example.kingburguer.data.RefreshTokenRequest
@@ -12,6 +13,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -37,6 +39,8 @@ interface KingBurguerService {
         @Header("Authorization") token: String,
     ): Response<LoginResponse>
 
+    @GET("feed")
+    suspend fun fetchFeed(@Header("Authorization") token: String): Response<FeedResponse>
 
     companion object {
 

@@ -43,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.kingburguer.R
 import com.example.kingburguer.composes.home.HomeScreen
+import com.example.kingburguer.composes.home.HomeUiState
 import com.example.kingburguer.composes.product.ProductScreen
 import com.example.kingburguer.composes.profile.ProfileScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme

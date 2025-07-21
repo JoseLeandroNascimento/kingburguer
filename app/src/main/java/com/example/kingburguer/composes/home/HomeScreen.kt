@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +30,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,10 +41,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kingburguer.R
 import com.example.kingburguer.common.currency
+import com.example.kingburguer.data.CategoryResponse
 import com.example.kingburguer.ui.theme.KingburguerTheme
 import com.example.kingburguer.ui.theme.Orange600
+import com.example.kingburguer.viewmodels.HomeViewModel
 
 data class Product(
     val id: Int,
@@ -51,47 +56,57 @@ data class Product(
     val price: Double = 19.9
 )
 
-data class Category(
-    val name: String,
-    val products: List<Product>
-)
+@Composable
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = viewModel(factory = HomeViewModel.factory),
+    onProductClicked: (Int) -> Unit
+) {
+
+    val state = viewModel.uiState.collectAsState().value
+
+    HomeScreen(state = state, modifier = modifier, onProductClicked = onProductClicked)
+
+}
+
+@Composable
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    state: HomeUiState,
+    onProductClicked: (Int) -> Unit
+) {
+
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+        when {
+            state.isLoading -> {
+                CircularProgressIndicator()
+            }
+
+            state.error != null -> {
+                Text(text = state.error, color = MaterialTheme.colorScheme.primary)
+            }
+
+            else -> {
+                HomeScreen(
+                    modifier,
+                    categories = state.categories,
+                    onProductClicked = onProductClicked
+                )
+            }
+        }
+
+    }
+}
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, onProductClicked: (Int) -> Unit) {
-
-    val categories = listOf(
-        Category(
-            name = "Vegetariano",
-            products = listOf(
-                Product(id = 1,name = "Combo v1"),
-                Product(id = 2,name = "Combo v2"),
-                Product(id = 3,name = "Combo v3"),
-            )
-        ),
-        Category(
-            name = "Bovina",
-            products = listOf(
-                Product(id = 4,name = "Combo b1 asdfasdasd as d as d as d as da s"),
-                Product(id = 5,name = "Combo b2"),
-                Product(id = 6,name = "Combo b3"),
-                Product(id = 7,name = "Combo b4"),
-                Product(id = 8,name = "Combo b5"),
-                Product(id = 9,name = "Combo b6"),
-            )
-        ),
-        Category(
-            name = "Sobremesa",
-            products = listOf(
-                Product(id = 10,name = "Sobremesa s1"),
-                Product(id = 11,name = "Sobremesa s2"),
-                Product(id = 12,name = "Sobremesa s3"),
-                Product(id = 13,name = "Sobremesa s4"),
-                Product(id = 14,name = "Sobremesa s5"),
-                Product(id = 15,name = "Sobremesa s6"),
-            )
-        )
-    )
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    categories: List<CategoryResponse>,
+    onProductClicked: (Int) -> Unit
+) {
 
     Surface(
         modifier = modifier
@@ -178,7 +193,7 @@ fun HomeScreen(modifier: Modifier = Modifier, onProductClicked: (Int) -> Unit) {
                                             .clickable {
                                                 onProductClicked(prod.id)
                                             },
-                                        painter = painterResource(id = prod.picture),
+                                        painter = painterResource(id = R.drawable.lanche),
                                         contentDescription = prod.name
                                     )
                                     Text(
@@ -223,7 +238,11 @@ private fun HomeScreenLightPreview() {
         dynamicColor = false,
         darkTheme = false
     ) {
-        HomeScreen(onProductClicked = {})
+
+        val state = HomeUiState(
+            isLoading = true
+        )
+        HomeScreen(state = state, onProductClicked = {})
 
     }
 }
@@ -236,6 +255,26 @@ private fun HomeScreenDarkPreview() {
         dynamicColor = false,
         darkTheme = true
     ) {
-        HomeScreen(onProductClicked = {})
+
+        val state = HomeUiState(
+            error = "Erro de teste"
+        )
+        HomeScreen(state = state, onProductClicked = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenEmptyDarkPreview() {
+
+    KingburguerTheme(
+        dynamicColor = false,
+        darkTheme = true
+    ) {
+
+        val state = HomeUiState(
+            categories = emptyList()
+        )
+        HomeScreen(state = state, onProductClicked = {})
     }
 }

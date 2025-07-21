@@ -13,10 +13,3 @@ data class LoginResponse(
     @SerializedName("expires_seconds") val expiresSeconds: Double,
 )
 
-data class Error(
-    val detail: String
-)
-
-data class ErrorAuth(
-    val detail: ErrorDetail
-)

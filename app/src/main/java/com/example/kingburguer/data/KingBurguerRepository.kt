@@ -1,7 +1,9 @@
 package com.example.kingburguer.data
 
+import android.util.Log
 import com.example.kingburguer.api.KingBurguerService
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import retrofit2.Response
 
 class KingBurguerRepository(
@@ -64,6 +66,15 @@ class KingBurguerRepository(
 
     }
 
+    suspend fun fetchFeed(): ApiResult<FeedResponse> {
+        val userCredentials = localStorage.fetchInitialUserCredential()
+        val token = "${userCredentials.tokenType} ${userCredentials.accessToken}"
+
+        return apiCall {
+            service.fetchFeed(token)
+        }
+    }
+
     private suspend fun updateCredentials(data: LoginResponse) {
         val newUserCredentials = UserCredentials(
             data.accessToken,
@@ -82,10 +93,17 @@ class KingBurguerRepository(
             if (!response.isSuccessful) {
                 val errorData = response.errorBody()?.string()?.let {
                     if (response.code() == 401) {
-                        val errorAuth = Gson().fromJson(it, ErrorAuth::class.java)
-                        ApiResult.Error(errorAuth.detail.message)
+                        try {
+                            val errorAuth = Gson().fromJson(it, ErrorAuth::class.java)
+                            ApiResult.Error(errorAuth.detail.message)
+
+                        } catch (e: JsonSyntaxException) {
+                            val error = Gson().fromJson(it, Error::class.java)
+                            ApiResult.Error(error.detail)
+                        }
                     } else {
                         Gson().fromJson(it, ApiResult.Error::class.java)
+
                     }
                 }
                 return errorData ?: ApiResult.Error("Internal server error")

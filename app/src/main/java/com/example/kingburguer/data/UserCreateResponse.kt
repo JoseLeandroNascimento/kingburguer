@@ -20,6 +20,3 @@ sealed class UserCreateResponse {
 
 }
 
-data class ErrorDetail(
-    val message: String
-)
