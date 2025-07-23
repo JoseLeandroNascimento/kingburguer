@@ -77,7 +77,7 @@ fun HomeScreen(
     onProductClicked: (Int) -> Unit
 ) {
 
-    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
         when {
             state.isLoading -> {
@@ -124,7 +124,7 @@ fun HomeScreen(
             ) {
 
                 Image(
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .height(230.dp)
                         .background(Color.Blue),

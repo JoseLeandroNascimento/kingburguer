@@ -4,11 +4,11 @@ import com.example.kingburguer.data.FeedResponse
 import com.example.kingburguer.data.LoginRequest
 import com.example.kingburguer.data.LoginResponse
 import com.example.kingburguer.data.ProductDetailsResponse
+import com.example.kingburguer.data.ProfileResponse
 import com.example.kingburguer.data.RefreshTokenRequest
 import com.example.kingburguer.data.UserCreateResponse
 import com.example.kingburguer.data.UserRequest
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -49,6 +49,9 @@ interface KingBurguerService {
         @Header("Authorization") token: String,
         @Path("id") productId: Int
     ): Response<ProductDetailsResponse>
+
+    @GET("users/me")
+    suspend fun fetchMe(@Header("Authorization") token: String): Response<ProfileResponse>
 
     companion object {
 

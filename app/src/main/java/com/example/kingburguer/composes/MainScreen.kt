@@ -43,7 +43,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.kingburguer.R
 import com.example.kingburguer.composes.home.HomeScreen
-import com.example.kingburguer.composes.home.HomeUiState
 import com.example.kingburguer.composes.product.ProductScreen
 import com.example.kingburguer.composes.profile.ProfileScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
@@ -118,7 +117,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             MainContentScreen(
                 contentPadding = contentPadding,
                 navHostController = navController
-
             )
 
         }
@@ -129,20 +127,21 @@ fun MainScreen(modifier: Modifier = Modifier) {
 fun MainContentScreen(contentPadding: PaddingValues, navHostController: NavHostController) {
 
     NavHost(
-        modifier = Modifier.padding(contentPadding),
         navController = navHostController,
         startDestination = Screen.HOME.route
     ) {
         composable(Screen.HOME.route) {
-            HomeScreen() { productId ->
+            HomeScreen(
+                modifier = Modifier.padding(contentPadding),
+            ) { productId ->
                 navHostController.navigate("${Screen.PRODUCT.route}/$productId")
             }
         }
         composable(Screen.COUPON.route) {
-            CouponScreen()
+            CouponScreen(modifier = Modifier.padding(contentPadding))
         }
         composable(Screen.PROFILE.route) {
-            ProfileScreen()
+            ProfileScreen(modifier = Modifier.padding(contentPadding))
         }
         composable(
             route = "${Screen.PRODUCT.route}/{productId}",
@@ -152,7 +151,7 @@ fun MainContentScreen(contentPadding: PaddingValues, navHostController: NavHostC
                 }
             )
         ) {
-            ProductScreen()
+            ProductScreen(modifier = Modifier.padding(contentPadding))
         }
     }
 }
