@@ -1,6 +1,5 @@
 package com.example.kingburguer.composes.product
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,14 +13,15 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,12 +29,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import com.example.kingburguer.R
 import com.example.kingburguer.common.currency
 import com.example.kingburguer.composes.components.KingButton
-import com.example.kingburguer.composes.home.Product
+import com.example.kingburguer.data.ProductDetailsResponse
 import com.example.kingburguer.ui.theme.KingburguerTheme
 import com.example.kingburguer.viewmodels.ProductViewModel
+
 
 @Composable
 fun ProductScreen(
@@ -42,14 +44,41 @@ fun ProductScreen(
     viewModel: ProductViewModel = viewModel(factory = ProductViewModel.factory)
 ) {
 
-    ProductScreen(modifier = modifier, viewModel.product)
+    val state = viewModel.uiState.collectAsState().value
+
+    ProductScreen(modifier = modifier, state)
 
 }
 
 @Composable
 fun ProductScreen(
     modifier: Modifier = Modifier,
-    product: Product
+    state: ProductUiState
+) {
+
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+        when {
+            state.isLoading -> {
+
+                CircularProgressIndicator()
+            }
+
+            state.error != null -> {
+                Text(text = state.error, color = MaterialTheme.colorScheme.primary)
+            }
+
+            state.productDetails != null -> {
+                ProductScreen(modifier, state.productDetails)
+            }
+        }
+    }
+}
+
+@Composable
+fun ProductScreen(
+    modifier: Modifier = Modifier,
+    productDetails: ProductDetailsResponse
 ) {
 
     val scrollState = rememberScrollState()
@@ -68,11 +97,11 @@ fun ProductScreen(
                     .verticalScroll(state = scrollState)
             ) {
 
-                Image(
+                AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(230.dp),
-                    painter = painterResource(id = product.picture),
+                    model = productDetails.pictureUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
@@ -84,7 +113,7 @@ fun ProductScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = product.name,
+                        text = productDetails.name,
                         modifier = Modifier.weight(1f),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
@@ -100,7 +129,7 @@ fun ProductScreen(
                                 shape = RoundedCornerShape(8.dp)
                             )
                             .padding(horizontal = 12.dp),
-                        text = product.price.currency(),
+                        text = productDetails.price.currency(),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.surface,
@@ -112,7 +141,7 @@ fun ProductScreen(
                     modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 56.dp),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
-                    text = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing"
+                    text = productDetails.description
                 )
 
             }
@@ -133,7 +162,7 @@ private fun ProductScreenLightPreview() {
         dynamicColor = false,
         darkTheme = false
     ) {
-        ProductScreen(product = Product(id = 1, name = "Produto teste", price = 19.90))
+        ProductScreen(state = ProductUiState())
     }
 }
 
@@ -145,6 +174,6 @@ private fun ProductScreenDarkPreview() {
         dynamicColor = false,
         darkTheme = true
     ) {
-        ProductScreen(product = Product(id = 1, name = "Produto teste", price = 19.90))
+        ProductScreen(state = ProductUiState())
     }
 }

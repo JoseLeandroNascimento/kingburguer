@@ -199,6 +199,7 @@ fun HomeScreen(
                                         contentDescription = prod.name
                                     )
                                     Text(
+
                                         modifier = Modifier.fillMaxWidth(),
                                         text = prod.name,
                                         style = MaterialTheme.typography.bodyMedium,
@@ -222,8 +223,6 @@ fun HomeScreen(
                             }
                         }
                     }
-
-
                 }
             }
         }
