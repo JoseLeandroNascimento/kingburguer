@@ -24,7 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kingburguer.R
+import com.example.kingburguer.common.formatted
 import com.example.kingburguer.ui.theme.KingburguerTheme
+import com.example.kingburguer.validations.mask
 import com.example.kingburguer.viewmodels.ProfileViewModel
 
 @Composable
@@ -61,15 +63,20 @@ fun ProfileScreen(modifier: Modifier = Modifier, state: ProfileUiState) {
 
             with(state.profile) {
 
-                Surface(modifier = modifier
-                    .fillMaxSize()
-                    .padding(top = 60.dp)) {
+                Surface(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(top = 60.dp)
+                ) {
                     Column {
                         ProfileProperty(key = R.string.prop_id, value = id)
                         ProfileProperty(key = R.string.prop_name, value = name)
                         ProfileProperty(key = R.string.prop_email, value = email)
-                        ProfileProperty(key = R.string.prop_document, value = document)
-                        ProfileProperty(key = R.string.prop_birthday, value = birthday)
+                        ProfileProperty(
+                            key = R.string.prop_document,
+                            value = mask("###.###.###-##", "", document)
+                        )
+                        ProfileProperty(key = R.string.prop_birthday, value = birthday.formatted())
                     }
                 }
             }
