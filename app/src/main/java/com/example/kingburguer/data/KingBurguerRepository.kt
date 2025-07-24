@@ -55,6 +55,15 @@ class KingBurguerRepository(
         }
     }
 
+    suspend fun createCoupon(productId: Int): ApiResult<CouponResponse> {
+        val userCredentials = localStorage.fetchInitialUserCredential()
+        val token = "${userCredentials.tokenType} ${userCredentials.accessToken}"
+
+        return apiCall {
+            service.createCoupon(token, productId)
+        }
+    }
+
 
     suspend fun postUser(userRequest: UserRequest): ApiResult<UserCreateResponse> {
 

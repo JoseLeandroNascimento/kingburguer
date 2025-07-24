@@ -61,6 +61,37 @@ class ProductViewModel(
 
     }
 
+    fun reset(){
+        _uiState.value = ProductUiState()
+    }
+
+    fun createCoupon(){
+        _uiState.update {
+            it.copy(isLoading = true)
+        }
+
+        viewModelScope.launch {
+
+            val response = repository
+                .createCoupon(productId)
+
+            when (response) {
+
+                is ApiResult.Error -> {
+                    _uiState.update {
+                        it.copy(isLoading = false, error = response.message)
+                    }
+                }
+
+                is ApiResult.Success -> {
+                    _uiState.update {
+                        it.copy(isLoading = false, coupon = response.data)
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
 
         val factory = viewModelFactory {

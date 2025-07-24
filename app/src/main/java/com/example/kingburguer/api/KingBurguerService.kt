@@ -1,5 +1,6 @@
 package com.example.kingburguer.api
 
+import com.example.kingburguer.data.CouponResponse
 import com.example.kingburguer.data.FeedResponse
 import com.example.kingburguer.data.LoginRequest
 import com.example.kingburguer.data.LoginResponse
@@ -8,6 +9,7 @@ import com.example.kingburguer.data.ProfileResponse
 import com.example.kingburguer.data.RefreshTokenRequest
 import com.example.kingburguer.data.UserCreateResponse
 import com.example.kingburguer.data.UserRequest
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -50,6 +52,12 @@ interface KingBurguerService {
         @Path("id") productId: Int
     ): Response<ProductDetailsResponse>
 
+    @POST("products/{id}/coupon")
+    suspend fun createCoupon(
+        @Header("Authorization") token: String,
+        @Path("id") productId: Int
+    ): Response<CouponResponse>
+
     @GET("users/me")
     suspend fun fetchMe(@Header("Authorization") token: String): Response<ProfileResponse>
 
@@ -67,10 +75,12 @@ interface KingBurguerService {
                 .addInterceptor(logger)
                 .build()
 
+            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(clientOk)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
                 .create(KingBurguerService::class.java)
         }

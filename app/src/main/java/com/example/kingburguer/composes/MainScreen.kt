@@ -151,7 +151,12 @@ fun MainContentScreen(contentPadding: PaddingValues, navHostController: NavHostC
                 }
             )
         ) {
-            ProductScreen(modifier = Modifier.padding(contentPadding))
+            ProductScreen(
+                modifier = Modifier.padding(contentPadding),
+                onCouponGenerated = {
+                    navHostController.popBackStack()
+                }
+            )
         }
     }
 }

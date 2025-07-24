@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -32,6 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.example.kingburguer.R
 import com.example.kingburguer.common.currency
+import com.example.kingburguer.composes.components.KingAlert
 import com.example.kingburguer.composes.components.KingButton
 import com.example.kingburguer.data.ProductDetailsResponse
 import com.example.kingburguer.ui.theme.KingburguerTheme
@@ -41,19 +44,32 @@ import com.example.kingburguer.viewmodels.ProductViewModel
 @Composable
 fun ProductScreen(
     modifier: Modifier = Modifier,
-    viewModel: ProductViewModel = viewModel(factory = ProductViewModel.factory)
+    viewModel: ProductViewModel = viewModel(factory = ProductViewModel.factory),
+    onCouponGenerated: () -> Unit
 ) {
 
     val state = viewModel.uiState.collectAsState().value
 
-    ProductScreen(modifier = modifier, state)
+    ProductScreen(
+        modifier = modifier,
+        state = state,
+        couponClicked = {
+            viewModel.createCoupon()
+        },
+        onCouponGenerated = {
+            viewModel.reset()
+            onCouponGenerated()
+        }
+    )
 
 }
 
 @Composable
 fun ProductScreen(
     modifier: Modifier = Modifier,
-    state: ProductUiState
+    state: ProductUiState,
+    couponClicked: () -> Unit,
+    onCouponGenerated: () -> Unit
 ) {
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -68,9 +84,26 @@ fun ProductScreen(
                 Text(text = state.error, color = MaterialTheme.colorScheme.primary)
             }
 
-            state.productDetails != null -> {
-                ProductScreen(modifier, state.productDetails)
+            else ->{
+                state.productDetails?.let {
+                    ProductScreen(modifier, state.productDetails, couponClicked = couponClicked)
+                }
+
+                state.coupon?.let{
+                    KingAlert(
+                        onDismissRequest = {},
+                        onConfirmation = onCouponGenerated,
+                        dialogTitle = stringResource(id = R.string.app_name),
+                        dialogText = stringResource(
+                            id = R.string.coupon_generated,
+                            state.coupon.coupon
+                        ),
+                        icon = Icons.Filled.Info
+                    )
+
+                }
             }
+
         }
     }
 }
@@ -78,7 +111,8 @@ fun ProductScreen(
 @Composable
 fun ProductScreen(
     modifier: Modifier = Modifier,
-    productDetails: ProductDetailsResponse
+    productDetails: ProductDetailsResponse,
+    couponClicked: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -148,8 +182,9 @@ fun ProductScreen(
 
             KingButton(
                 text = stringResource(id = R.string.get_coupon),
-                modifier = Modifier.padding(horizontal = 24.dp)
-            ) { }
+                modifier = Modifier.padding(horizontal = 24.dp),
+                onClick = couponClicked
+            )
         }
     }
 }
@@ -162,7 +197,7 @@ private fun ProductScreenLightPreview() {
         dynamicColor = false,
         darkTheme = false
     ) {
-        ProductScreen(state = ProductUiState())
+        ProductScreen(state = ProductUiState(), couponClicked = {}, onCouponGenerated = {})
     }
 }
 
@@ -174,6 +209,6 @@ private fun ProductScreenDarkPreview() {
         dynamicColor = false,
         darkTheme = true
     ) {
-        ProductScreen(state = ProductUiState())
+        ProductScreen(state = ProductUiState(), couponClicked = {}, onCouponGenerated = {})
     }
 }
