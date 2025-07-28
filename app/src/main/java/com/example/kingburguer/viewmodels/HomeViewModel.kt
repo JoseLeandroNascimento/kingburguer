@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.kingburguer.api.KingBurguerService
+import com.example.kingburguer.composes.home.CategoryUiState
+import com.example.kingburguer.composes.home.HighlightUiState
 import com.example.kingburguer.composes.home.HomeUiState
 import com.example.kingburguer.data.ApiResult
 import com.example.kingburguer.data.KingBurguerLocalStorage
@@ -24,13 +26,52 @@ class HomeViewModel(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
-        start()
+        fetchHighlight()
+        fetchCategories()
     }
 
-    fun start() {
+    fun fetchHighlight() {
 
         _uiState.update {
-            it.copy(isLoading = true)
+            it.copy(highlightUiState = HighlightUiState(isLoading = true))
+        }
+
+        viewModelScope.launch {
+            val response = repository.fetchHighlight()
+
+            when (response) {
+
+                is ApiResult.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            highlightUiState = HighlightUiState(
+                                isLoading = false,
+                                error = response.message
+                            )
+                        )
+                    }
+                }
+
+                is ApiResult.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            highlightUiState =
+                                HighlightUiState(
+                                    isLoading = false,
+                                    error = null,
+                                    product = response.data
+                                )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun fetchCategories() {
+
+        _uiState.update {
+            it.copy(categoryUiState = CategoryUiState(isLoading = true))
         }
 
         viewModelScope.launch {
@@ -40,16 +81,23 @@ class HomeViewModel(
 
                 is ApiResult.Error -> {
                     _uiState.update {
-                        it.copy(isLoading = false, error = response.message)
+                        it.copy(
+                            categoryUiState = CategoryUiState(
+                                isLoading = false,
+                                error = response.message
+                            )
+                        )
                     }
                 }
 
                 is ApiResult.Success -> {
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
-                            error = null,
-                            categories = response.data.categories
+                            categoryUiState = CategoryUiState(
+                                isLoading = false,
+                                error = null,
+                                categories = response.data.categories
+                            )
                         )
                     }
                 }

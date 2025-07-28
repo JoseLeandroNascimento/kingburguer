@@ -11,7 +11,9 @@ import com.example.kingburguer.composes.KingBurguerApp
 import com.example.kingburguer.composes.Screen
 import com.example.kingburguer.ui.theme.KingburguerTheme
 import com.example.kingburguer.viewmodels.SplashViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: SplashViewModel by viewModels {

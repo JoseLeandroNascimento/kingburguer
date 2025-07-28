@@ -2,6 +2,7 @@ package com.example.kingburguer.api
 
 import com.example.kingburguer.data.CouponResponse
 import com.example.kingburguer.data.FeedResponse
+import com.example.kingburguer.data.HighlightProductResponse
 import com.example.kingburguer.data.LoginRequest
 import com.example.kingburguer.data.LoginResponse
 import com.example.kingburguer.data.ProductDetailsResponse
@@ -58,12 +59,15 @@ interface KingBurguerService {
         @Path("id") productId: Int
     ): Response<CouponResponse>
 
+    @GET("highlight")
+    suspend fun fetchHighlight(@Header("Authorization") token: String): Response<HighlightProductResponse>
+
     @GET("users/me")
     suspend fun fetchMe(@Header("Authorization") token: String): Response<ProfileResponse>
 
     companion object {
 
-        private const val BASE_URL = "https://hades.tiagoaguiar.co/kingburguer/"
+        const val BASE_URL = "https://hades.tiagoaguiar.co/kingburguer/"
 
         fun create(): KingBurguerService {
 

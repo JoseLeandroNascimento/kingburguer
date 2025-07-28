@@ -3,6 +3,8 @@ package com.example.kingburguer.composes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kingburguer.composes.login.LoginScreen
 import com.example.kingburguer.composes.signup.SignupScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
+import com.example.kingburguer.viewmodels.LoginViewModel
 
 @Composable
 fun KingBurguerApp(
@@ -34,8 +37,12 @@ fun KingBurguerNavHost(
 ) {
 
     NavHost(navController = navController, startDestination = startDestination.route) {
-        composable(Screen.LOGIN.route) {
+        composable(Screen.LOGIN.route) { navBackStackEntry ->
+
+            val viewModel: LoginViewModel = hiltViewModel(navBackStackEntry)
+
             LoginScreen(
+                loginViewModel = viewModel,
                 onSignup = {
                     navController.navigate(Screen.SIGNUP.route)
                 },
@@ -59,7 +66,11 @@ fun KingBurguerNavHost(
         }
 
         composable(Screen.MAIN.route) {
-            MainScreen()
+            MainScreen(onNavigateToLogin = {
+                navController.navigate((Screen.LOGIN.route)) {
+                    popUpTo(Screen.LOGIN.route) { inclusive = true }
+                }
+            })
         }
     }
 }

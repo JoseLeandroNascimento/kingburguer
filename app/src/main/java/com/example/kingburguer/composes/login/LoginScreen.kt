@@ -46,7 +46,7 @@ import com.example.kingburguer.viewmodels.LoginViewModel
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.factory),
+    loginViewModel: LoginViewModel = viewModel(),
     onNavigateToHome: () -> Unit,
     onSignup: () -> Unit
 ) {
