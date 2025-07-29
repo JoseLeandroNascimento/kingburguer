@@ -6,7 +6,6 @@ import com.example.kingburguer.data.ApiResult
 import com.example.kingburguer.data.Error
 import com.example.kingburguer.data.ErrorAuth
 import com.example.kingburguer.data.KingBurguerLocalStorage
-import com.example.kingburguer.data.UserCredentials
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import retrofit2.Response
@@ -44,6 +43,33 @@ class AuthRepositoryImpl @Inject constructor(
 
         return response
 
+    }
+
+    override suspend fun fetchInitialCredentials() = localStorage.fetchInitialUserCredential()
+
+    override suspend fun refreshToken(request: RefreshTokenRequest): ApiResult<LoginResponse> {
+
+        try {
+
+            val userCredentials = localStorage.fetchInitialUserCredential()
+            val response = apiCall {
+                service.refreshToken(
+                    request,
+                    "${userCredentials.tokenType} ${userCredentials.accessToken}"
+                )
+            }
+
+            if (response is ApiResult.Success) {
+
+                updateCredentials((response.data))
+            }
+
+            return response
+
+        } catch (e: Exception) {
+
+            return ApiResult.Error(e.message ?: "Unexpected exceptions")
+        }
     }
 
     private suspend fun updateCredentials(data: LoginResponse) {

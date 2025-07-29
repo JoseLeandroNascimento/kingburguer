@@ -1,4 +1,4 @@
-package com.example.kingburguer
+package com.example.kingburguer.core.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,15 +10,12 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.kingburguer.composes.KingBurguerApp
 import com.example.kingburguer.composes.Screen
 import com.example.kingburguer.ui.theme.KingburguerTheme
-import com.example.kingburguer.viewmodels.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: SplashViewModel by viewModels {
-        SplashViewModel.factory
-    }
+    private val viewModel: SplashViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

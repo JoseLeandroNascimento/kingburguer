@@ -1,7 +1,6 @@
 package com.example.kingburguer.data
 
 import com.example.kingburguer.api.KingBurguerService
-import com.example.kingburguer.auth.data.LoginResponse
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import retrofit2.Response
@@ -11,32 +10,6 @@ class KingBurguerRepository(
     private val localStorage: KingBurguerLocalStorage
 ) {
 
-    suspend fun fetchInitialCredentials() = localStorage.fetchInitialUserCredential()
-
-    suspend fun refreshToken(request: RefreshTokenRequest): ApiResult<LoginResponse> {
-
-        try {
-
-            val userCredentials = localStorage.fetchInitialUserCredential()
-            val response = apiCall {
-                service.refreshToken(
-                    request,
-                    "${userCredentials.tokenType} ${userCredentials.accessToken}"
-                )
-            }
-
-            if (response is ApiResult.Success) {
-
-                updateCredentials((response.data))
-            }
-
-            return response
-
-        } catch (e: Exception) {
-
-            return ApiResult.Error(e.message ?: "Unexpected exceptions")
-        }
-    }
 
     suspend fun createCoupon(productId: Int): ApiResult<CouponResponse> {
         val userCredentials = localStorage.fetchInitialUserCredential()
@@ -85,17 +58,6 @@ class KingBurguerRepository(
             service.fetchProductById(token, productId)
         }
     }
-
-    private suspend fun updateCredentials(data: LoginResponse) {
-        val newUserCredentials = UserCredentials(
-            data.accessToken,
-            data.refreshToken,
-            data.expiresSeconds.toLong(),
-            data.tokenType
-        )
-        localStorage.updateUserCredential(newUserCredentials)
-    }
-
 
     private suspend fun <T> apiCall(call: suspend () -> Response<T>): ApiResult<T> {
         try {

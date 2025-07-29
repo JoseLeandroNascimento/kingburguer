@@ -1,15 +1,12 @@
-package com.example.kingburguer.di
+package com.example.kingburguer.core.di
 
-import android.content.Context
 import com.example.kingburguer.api.KingBurguerService
-import com.example.kingburguer.api.KingBurguerService.Companion.BASE_URL
 import com.example.kingburguer.data.KingBurguerLocalStorage
 import com.example.kingburguer.data.KingBurguerRepository
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -43,7 +40,7 @@ object AppModule {
         val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(KingBurguerService.Companion.BASE_URL)
             .client(clientOk)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
