@@ -1,4 +1,4 @@
-package com.example.kingburguer.data
+package com.example.kingburguer.profile.data
 
 import java.util.Date
 

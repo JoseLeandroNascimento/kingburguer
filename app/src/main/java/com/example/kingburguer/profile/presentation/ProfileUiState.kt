@@ -1,6 +1,6 @@
-package com.example.kingburguer.composes.profile
+package com.example.kingburguer.profile.presentation
 
-import com.example.kingburguer.data.ProfileResponse
+import com.example.kingburguer.profile.data.ProfileResponse
 
 data class ProfileUiState(
     val isLoading: Boolean = false,

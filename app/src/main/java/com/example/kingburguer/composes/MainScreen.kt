@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -46,7 +47,7 @@ import androidx.navigation.navArgument
 import com.example.kingburguer.R
 import com.example.kingburguer.composes.home.HomeScreen
 import com.example.kingburguer.composes.product.ProductScreen
-import com.example.kingburguer.composes.profile.ProfileScreen
+import com.example.kingburguer.profile.presentation.ProfileScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
 import com.example.kingburguer.viewmodels.MainViewModel
 
@@ -166,8 +167,11 @@ fun MainContentScreen(contentPadding: PaddingValues, navHostController: NavHostC
         composable(Screen.COUPON.route) {
             CouponScreen(modifier = Modifier.padding(contentPadding))
         }
-        composable(Screen.PROFILE.route) {
-            ProfileScreen(modifier = Modifier.padding(contentPadding))
+        composable(Screen.PROFILE.route) { backStack ->
+            ProfileScreen(
+                modifier = Modifier.padding(contentPadding),
+                viewModel = hiltViewModel(backStack)
+            )
         }
         composable(
             route = "${Screen.PRODUCT.route}/{productId}",

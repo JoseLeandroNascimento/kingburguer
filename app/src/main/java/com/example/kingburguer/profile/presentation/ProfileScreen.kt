@@ -1,4 +1,4 @@
-package com.example.kingburguer.composes.profile
+package com.example.kingburguer.profile.presentation
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -27,12 +27,11 @@ import com.example.kingburguer.R
 import com.example.kingburguer.common.formatted
 import com.example.kingburguer.ui.theme.KingburguerTheme
 import com.example.kingburguer.validations.mask
-import com.example.kingburguer.viewmodels.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    viewModel: ProfileViewModel = viewModel(factory = ProfileViewModel.factory)
+    viewModel: ProfileViewModel = viewModel()
 ) {
 
     val state = viewModel.uiState.collectAsState().value

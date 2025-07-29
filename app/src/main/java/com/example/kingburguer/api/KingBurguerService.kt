@@ -6,7 +6,7 @@ import com.example.kingburguer.data.HighlightProductResponse
 import com.example.kingburguer.auth.data.LoginRequest
 import com.example.kingburguer.auth.data.LoginResponse
 import com.example.kingburguer.data.ProductDetailsResponse
-import com.example.kingburguer.data.ProfileResponse
+import com.example.kingburguer.profile.data.ProfileResponse
 import com.example.kingburguer.auth.data.RefreshTokenRequest
 import com.example.kingburguer.auth.data.UserCreateResponse
 import com.example.kingburguer.auth.data.UserCreateRequest
