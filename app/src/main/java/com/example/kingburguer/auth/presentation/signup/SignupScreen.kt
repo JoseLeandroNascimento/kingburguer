@@ -1,4 +1,4 @@
-package com.example.kingburguer.composes.signup
+package com.example.kingburguer.auth.presentation.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +44,6 @@ import com.example.kingburguer.composes.components.KingButton
 import com.example.kingburguer.composes.components.KingTextField
 import com.example.kingburguer.composes.components.KingTextTitle
 import com.example.kingburguer.ui.theme.KingburguerTheme
-import com.example.kingburguer.viewmodels.SignupViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +51,7 @@ fun SignupScreen(
     modifier: Modifier = Modifier,
     onNavigationClick: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    viewModel: SignupViewModel = viewModel(factory = SignupViewModel.factory),
+    viewModel: SignupViewModel = viewModel(),
 
     ) {
 

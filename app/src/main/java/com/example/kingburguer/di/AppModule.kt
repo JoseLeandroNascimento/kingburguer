@@ -22,11 +22,11 @@ import javax.inject.Singleton
 object AppModule {
 
 
-    @Provides
-    @Singleton
-    fun providesLocalStorage(@ApplicationContext context: Context): KingBurguerLocalStorage {
-        return KingBurguerLocalStorage(context)
-    }
+//    @Provides
+//    @Singleton
+//    fun providesLocalStorage(@ApplicationContext context: Context): KingBurguerLocalStorage {
+//        return KingBurguerLocalStorage(context)
+//    }
 
     @Provides
     @Singleton

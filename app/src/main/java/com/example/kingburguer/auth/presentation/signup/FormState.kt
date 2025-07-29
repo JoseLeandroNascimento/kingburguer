@@ -1,4 +1,4 @@
-package com.example.kingburguer.composes.signup
+package com.example.kingburguer.auth.presentation.signup
 
 import com.example.kingburguer.validations.TextString
 

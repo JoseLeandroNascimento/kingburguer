@@ -1,6 +1,6 @@
 package com.example.kingburguer.auth.presentation.login
 
-import com.example.kingburguer.composes.signup.FieldState
+import com.example.kingburguer.auth.presentation.signup.FieldState
 
 data class FormState(
     val email: FieldState = FieldState(),

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kingburguer.auth.data.LoginRequest
 import com.example.kingburguer.auth.domain.AuthRepository
-import com.example.kingburguer.composes.signup.FieldState
+import com.example.kingburguer.auth.presentation.signup.FieldState
 import com.example.kingburguer.data.ApiResult
 import com.example.kingburguer.validations.EmailValidator
 import com.example.kingburguer.validations.PasswordValidator

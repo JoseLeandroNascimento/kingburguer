@@ -7,13 +7,15 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 private const val USER_CREDENTIALS_NAME = "user_credentials"
 private val Context.dataStore by preferencesDataStore(name = USER_CREDENTIALS_NAME)
 
-class KingBurguerLocalStorage(context: Context) {
+class KingBurguerLocalStorage @Inject constructor( @ApplicationContext context: Context) {
 
     private val dataStore: DataStore<Preferences> = context.dataStore
 

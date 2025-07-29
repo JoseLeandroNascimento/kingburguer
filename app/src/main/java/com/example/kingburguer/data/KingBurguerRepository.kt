@@ -1,7 +1,6 @@
 package com.example.kingburguer.data
 
 import com.example.kingburguer.api.KingBurguerService
-import com.example.kingburguer.auth.data.LoginRequest
 import com.example.kingburguer.auth.data.LoginResponse
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -13,9 +12,6 @@ class KingBurguerRepository(
 ) {
 
     suspend fun fetchInitialCredentials() = localStorage.fetchInitialUserCredential()
-
-
-
 
     suspend fun refreshToken(request: RefreshTokenRequest): ApiResult<LoginResponse> {
 
@@ -51,7 +47,7 @@ class KingBurguerRepository(
         }
     }
 
-    suspend fun fetchHighlight(): ApiResult<HighlightProductResponse>{
+    suspend fun fetchHighlight(): ApiResult<HighlightProductResponse> {
 
         val userCredentials = localStorage.fetchInitialUserCredential()
         val token = "${userCredentials.tokenType} ${userCredentials.accessToken}"
@@ -61,16 +57,6 @@ class KingBurguerRepository(
         }
     }
 
-
-    suspend fun postUser(userRequest: UserRequest): ApiResult<UserCreateResponse> {
-
-        val response = apiCall {
-            service.postUser(userRequest)
-        }
-
-        return response
-
-    }
 
     suspend fun fetchFeed(): ApiResult<FeedResponse> {
         val userCredentials = localStorage.fetchInitialUserCredential()

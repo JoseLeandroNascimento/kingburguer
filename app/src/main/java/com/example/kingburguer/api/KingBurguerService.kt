@@ -8,8 +8,8 @@ import com.example.kingburguer.auth.data.LoginResponse
 import com.example.kingburguer.data.ProductDetailsResponse
 import com.example.kingburguer.data.ProfileResponse
 import com.example.kingburguer.data.RefreshTokenRequest
-import com.example.kingburguer.data.UserCreateResponse
-import com.example.kingburguer.data.UserRequest
+import com.example.kingburguer.auth.data.UserCreateResponse
+import com.example.kingburguer.auth.data.UserCreateRequest
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -28,7 +28,7 @@ interface KingBurguerService {
 
     @POST("users")
     suspend fun postUser(
-        @Body userRequest: UserRequest,
+        @Body userCreateRequest: UserCreateRequest,
         @Header("x-secret-key") secretKey: String = "9974958d-ec79-4167-b50c-2af5a9012d88"
     ): Response<UserCreateResponse>
 

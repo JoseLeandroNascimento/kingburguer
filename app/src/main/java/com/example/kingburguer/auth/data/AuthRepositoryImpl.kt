@@ -10,13 +10,17 @@ import com.example.kingburguer.data.UserCredentials
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import retrofit2.Response
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val service: KingBurguerService,
     private val localStorage: KingBurguerLocalStorage
 ) : AuthRepository {
 
-    override suspend fun login(loginRequest: LoginRequest, keepLogged: Boolean): ApiResult<LoginResponse> {
+    override suspend fun login(
+        loginRequest: LoginRequest,
+        keepLogged: Boolean
+    ): ApiResult<LoginResponse> {
 
         val result = apiCall {
             service.login(loginRequest)
@@ -29,6 +33,16 @@ class AuthRepositoryImpl(
             }
         }
         return result
+
+    }
+
+    override suspend fun postUser(userCreateRequest: UserCreateRequest): ApiResult<UserCreateResponse> {
+
+        val response = apiCall {
+            service.postUser(userCreateRequest)
+        }
+
+        return response
 
     }
 

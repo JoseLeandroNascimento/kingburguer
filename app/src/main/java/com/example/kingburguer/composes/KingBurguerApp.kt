@@ -9,9 +9,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.kingburguer.auth.presentation.login.LoginScreen
-import com.example.kingburguer.composes.signup.SignupScreen
-import com.example.kingburguer.ui.theme.KingburguerTheme
 import com.example.kingburguer.auth.presentation.login.LoginViewModel
+import com.example.kingburguer.auth.presentation.signup.SignupScreen
+import com.example.kingburguer.ui.theme.KingburguerTheme
 
 @Composable
 fun KingBurguerApp(
@@ -53,8 +53,9 @@ fun KingBurguerNavHost(
             )
         }
 
-        composable(Screen.SIGNUP.route) {
+        composable(Screen.SIGNUP.route) { navBackStack ->
             SignupScreen(
+                viewModel = hiltViewModel(navBackStack),
                 onNavigationClick = {
                     navController.navigateUp()
                 },

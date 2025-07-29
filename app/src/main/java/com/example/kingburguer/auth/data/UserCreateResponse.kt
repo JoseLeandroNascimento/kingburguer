@@ -1,4 +1,6 @@
-package com.example.kingburguer.data
+package com.example.kingburguer.auth.data
+
+import com.example.kingburguer.data.ErrorDetail
 
 sealed class UserCreateResponse {
 
@@ -19,4 +21,3 @@ sealed class UserCreateResponse {
     ) : UserCreateResponse()
 
 }
-
