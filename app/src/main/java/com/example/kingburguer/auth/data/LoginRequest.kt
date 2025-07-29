@@ -1,4 +1,4 @@
-package com.example.kingburguer.data
+package com.example.kingburguer.auth.data
 
 data class LoginRequest(
     val username: String,

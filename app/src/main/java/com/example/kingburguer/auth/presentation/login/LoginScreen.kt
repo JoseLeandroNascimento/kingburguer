@@ -1,4 +1,4 @@
-package com.example.kingburguer.composes.login
+package com.example.kingburguer.auth.presentation.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +41,7 @@ import com.example.kingburguer.composes.components.KingButton
 import com.example.kingburguer.composes.components.KingTextField
 import com.example.kingburguer.composes.components.KingTextTitle
 import com.example.kingburguer.ui.theme.KingburguerTheme
-import com.example.kingburguer.viewmodels.LoginViewModel
+import com.example.kingburguer.auth.presentation.login.LoginViewModel
 
 @Composable
 fun LoginScreen(

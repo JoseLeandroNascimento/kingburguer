@@ -1,4 +1,4 @@
-package com.example.kingburguer.composes.login
+package com.example.kingburguer.auth.presentation.login
 
 import com.example.kingburguer.composes.signup.FieldState
 

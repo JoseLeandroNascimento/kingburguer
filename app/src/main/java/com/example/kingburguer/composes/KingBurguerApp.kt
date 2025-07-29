@@ -4,15 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.kingburguer.composes.login.LoginScreen
+import com.example.kingburguer.auth.presentation.login.LoginScreen
 import com.example.kingburguer.composes.signup.SignupScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
-import com.example.kingburguer.viewmodels.LoginViewModel
+import com.example.kingburguer.auth.presentation.login.LoginViewModel
 
 @Composable
 fun KingBurguerApp(

@@ -3,8 +3,8 @@ package com.example.kingburguer.api
 import com.example.kingburguer.data.CouponResponse
 import com.example.kingburguer.data.FeedResponse
 import com.example.kingburguer.data.HighlightProductResponse
-import com.example.kingburguer.data.LoginRequest
-import com.example.kingburguer.data.LoginResponse
+import com.example.kingburguer.auth.data.LoginRequest
+import com.example.kingburguer.auth.data.LoginResponse
 import com.example.kingburguer.data.ProductDetailsResponse
 import com.example.kingburguer.data.ProfileResponse
 import com.example.kingburguer.data.RefreshTokenRequest

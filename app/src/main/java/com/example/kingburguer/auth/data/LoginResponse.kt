@@ -1,4 +1,4 @@
-package com.example.kingburguer.data
+package com.example.kingburguer.auth.data
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,7 +1,8 @@
 package com.example.kingburguer.data
 
-import android.util.Log
 import com.example.kingburguer.api.KingBurguerService
+import com.example.kingburguer.auth.data.LoginRequest
+import com.example.kingburguer.auth.data.LoginResponse
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import retrofit2.Response
@@ -13,21 +14,7 @@ class KingBurguerRepository(
 
     suspend fun fetchInitialCredentials() = localStorage.fetchInitialUserCredential()
 
-    suspend fun login(loginRequest: LoginRequest, keepLogged: Boolean): ApiResult<LoginResponse> {
 
-        val result = apiCall {
-            service.login(loginRequest)
-        }
-
-        if (result is ApiResult.Success<LoginResponse>) {
-
-            if (keepLogged) {
-                updateCredentials((result.data))
-            }
-        }
-        return result
-
-    }
 
 
     suspend fun refreshToken(request: RefreshTokenRequest): ApiResult<LoginResponse> {

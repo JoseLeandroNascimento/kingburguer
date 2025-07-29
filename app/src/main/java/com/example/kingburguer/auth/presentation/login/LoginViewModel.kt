@@ -1,16 +1,14 @@
-package com.example.kingburguer.viewmodels
+package com.example.kingburguer.auth.presentation.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kingburguer.composes.login.FormState
-import com.example.kingburguer.composes.login.LoginUiState
+import com.example.kingburguer.auth.data.LoginRequest
+import com.example.kingburguer.auth.domain.AuthRepository
 import com.example.kingburguer.composes.signup.FieldState
 import com.example.kingburguer.data.ApiResult
-import com.example.kingburguer.data.KingBurguerRepository
-import com.example.kingburguer.data.LoginRequest
 import com.example.kingburguer.validations.EmailValidator
 import com.example.kingburguer.validations.PasswordValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: KingBurguerRepository
+    private val repository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -33,7 +31,7 @@ class LoginViewModel @Inject constructor(
 
     fun updateEmail(email: String) {
 
-        val errorMessage = EmailValidator.validate(email)
+        val errorMessage = EmailValidator.Companion.validate(email)
 
         formState = formState.copy(
             email = FieldState(
@@ -48,7 +46,7 @@ class LoginViewModel @Inject constructor(
 
     fun updatePassword(password: String) {
 
-        var errorMessage = PasswordValidator.validate(password)
+        var errorMessage = PasswordValidator.Companion.validate(password)
         formState = formState.copy(
             password = FieldState(
                 field = password,
