@@ -1,7 +1,9 @@
-package com.example.kingburguer.data
+package com.example.kingburguer.main.data
 
-import com.example.kingburguer.api.KingBurguerService
 import com.example.kingburguer.common.apiCall
+import com.example.kingburguer.core.api.KingBurguerService
+import com.example.kingburguer.core.data.ApiResult
+import com.example.kingburguer.core.data.KingBurguerLocalStorage
 import com.example.kingburguer.home.data.FeedResponse
 import com.example.kingburguer.home.data.HighlightProductResponse
 import com.example.kingburguer.product.data.CouponResponse

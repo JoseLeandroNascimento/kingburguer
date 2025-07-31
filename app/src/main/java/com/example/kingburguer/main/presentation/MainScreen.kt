@@ -45,11 +45,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.kingburguer.R
+import com.example.kingburguer.core.presentation.Screen
 import com.example.kingburguer.home.presentation.HomeScreen
 import com.example.kingburguer.product.presentation.ProductScreen
 import com.example.kingburguer.profile.presentation.ProfileScreen
-import com.example.kingburguer.ui.theme.KingburguerTheme
-import com.example.kingburguer.viewmodels.MainViewModel
+import com.example.kingburguer.composes.theme.KingburguerTheme
+import com.example.kingburguer.main.presentation.MainViewModel
 
 @Composable
 fun MainScreen(
