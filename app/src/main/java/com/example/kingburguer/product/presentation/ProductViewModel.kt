@@ -1,24 +1,20 @@
-package com.example.kingburguer.viewmodels
+package com.example.kingburguer.product.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.kingburguer.api.KingBurguerService
-import com.example.kingburguer.composes.product.ProductUiState
 import com.example.kingburguer.data.ApiResult
-import com.example.kingburguer.data.KingBurguerLocalStorage
 import com.example.kingburguer.data.KingBurguerRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProductViewModel(
+@HiltViewModel
+class ProductViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val repository: KingBurguerRepository
 ) : ViewModel() {
@@ -61,11 +57,11 @@ class ProductViewModel(
 
     }
 
-    fun reset(){
+    fun reset() {
         _uiState.value = ProductUiState()
     }
 
-    fun createCoupon(){
+    fun createCoupon() {
         _uiState.update {
             it.copy(isLoading = true)
         }
@@ -88,20 +84,6 @@ class ProductViewModel(
                         it.copy(isLoading = false, coupon = response.data)
                     }
                 }
-            }
-        }
-    }
-
-    companion object {
-
-        val factory = viewModelFactory {
-            initializer {
-                val savedStateHandle = createSavedStateHandle()
-                val application = this[APPLICATION_KEY]!!.applicationContext
-                val service = KingBurguerService.create()
-                val localStorage = KingBurguerLocalStorage(application)
-                val repository = KingBurguerRepository(service, localStorage)
-                ProductViewModel(savedStateHandle, repository)
             }
         }
     }

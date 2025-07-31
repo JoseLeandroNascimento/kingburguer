@@ -1,14 +1,18 @@
-package com.example.kingburguer.data
+package com.example.kingburguer.product.data
 
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
-data class HighlightProductResponse(
+
+data class CouponResponse(
     val id: Int,
+    @SerializedName("user_id")
+    val userId: Int,
+    @SerializedName("expires_date")
+    val expiresDate: Date,
     @SerializedName("product_id")
     val productId: Int,
-    @SerializedName("picture_url")
-    val pictureUrl: String,
+    val coupon: String,
     @SerializedName("created_date")
     val createdDate: Date
 )

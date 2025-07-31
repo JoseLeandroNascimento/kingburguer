@@ -1,4 +1,4 @@
-package com.example.kingburguer.data
+package com.example.kingburguer.home.data
 
 import com.google.gson.annotations.SerializedName
 import java.util.Date

@@ -1,4 +1,4 @@
-package com.example.kingburguer.composes.home
+package com.example.kingburguer.home.presentation
 
 import android.util.Log
 import androidx.annotation.DrawableRes
@@ -45,11 +45,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.example.kingburguer.R
 import com.example.kingburguer.common.currency
-import com.example.kingburguer.data.CategoryResponse
-import com.example.kingburguer.data.HighlightProductResponse
+import com.example.kingburguer.home.data.CategoryResponse
+import com.example.kingburguer.home.data.HighlightProductResponse
 import com.example.kingburguer.ui.theme.KingburguerTheme
 import com.example.kingburguer.ui.theme.Orange600
-import com.example.kingburguer.viewmodels.HomeViewModel
 import java.util.Date
 
 data class Product(
@@ -62,7 +61,7 @@ data class Product(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(factory = HomeViewModel.factory),
+    viewModel: HomeViewModel = viewModel(),
     onProductClicked: (Int) -> Unit
 ) {
 

@@ -1,4 +1,4 @@
-package com.example.kingburguer.composes.product
+package com.example.kingburguer.product.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,15 +36,14 @@ import com.example.kingburguer.R
 import com.example.kingburguer.common.currency
 import com.example.kingburguer.composes.components.KingAlert
 import com.example.kingburguer.composes.components.KingButton
-import com.example.kingburguer.data.ProductDetailsResponse
+import com.example.kingburguer.product.data.ProductDetailsResponse
 import com.example.kingburguer.ui.theme.KingburguerTheme
-import com.example.kingburguer.viewmodels.ProductViewModel
 
 
 @Composable
 fun ProductScreen(
     modifier: Modifier = Modifier,
-    viewModel: ProductViewModel = viewModel(factory = ProductViewModel.factory),
+    viewModel: ProductViewModel = viewModel(),
     onCouponGenerated: () -> Unit
 ) {
 
@@ -84,12 +83,12 @@ fun ProductScreen(
                 Text(text = state.error, color = MaterialTheme.colorScheme.primary)
             }
 
-            else ->{
+            else -> {
                 state.productDetails?.let {
                     ProductScreen(modifier, state.productDetails, couponClicked = couponClicked)
                 }
 
-                state.coupon?.let{
+                state.coupon?.let {
                     KingAlert(
                         onDismissRequest = {},
                         onConfirmation = onCouponGenerated,

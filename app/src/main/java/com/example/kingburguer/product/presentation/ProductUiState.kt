@@ -1,7 +1,7 @@
-package com.example.kingburguer.composes.product
+package com.example.kingburguer.product.presentation
 
-import com.example.kingburguer.data.CouponResponse
-import com.example.kingburguer.data.ProductDetailsResponse
+import com.example.kingburguer.product.data.CouponResponse
+import com.example.kingburguer.product.data.ProductDetailsResponse
 
 data class ProductUiState(
     val isLoading: Boolean = false,

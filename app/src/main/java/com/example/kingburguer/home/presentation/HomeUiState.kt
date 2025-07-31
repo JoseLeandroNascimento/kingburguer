@@ -1,7 +1,7 @@
-package com.example.kingburguer.composes.home
+package com.example.kingburguer.home.presentation
 
-import com.example.kingburguer.data.CategoryResponse
-import com.example.kingburguer.data.HighlightProductResponse
+import com.example.kingburguer.home.data.CategoryResponse
+import com.example.kingburguer.home.data.HighlightProductResponse
 
 data class HomeUiState(
     val categoryUiState: CategoryUiState = CategoryUiState(),

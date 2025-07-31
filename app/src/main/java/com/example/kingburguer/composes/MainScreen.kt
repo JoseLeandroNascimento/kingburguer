@@ -45,8 +45,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.kingburguer.R
-import com.example.kingburguer.composes.home.HomeScreen
-import com.example.kingburguer.composes.product.ProductScreen
+import com.example.kingburguer.home.presentation.HomeScreen
+import com.example.kingburguer.product.presentation.ProductScreen
 import com.example.kingburguer.profile.presentation.ProfileScreen
 import com.example.kingburguer.ui.theme.KingburguerTheme
 import com.example.kingburguer.viewmodels.MainViewModel
@@ -157,8 +157,9 @@ fun MainContentScreen(contentPadding: PaddingValues, navHostController: NavHostC
         navController = navHostController,
         startDestination = Screen.HOME.route
     ) {
-        composable(Screen.HOME.route) {
+        composable(Screen.HOME.route) { backStack ->
             HomeScreen(
+                viewModel = hiltViewModel(backStack),
                 modifier = Modifier.padding(contentPadding),
             ) { productId ->
                 navHostController.navigate("${Screen.PRODUCT.route}/$productId")
@@ -180,8 +181,9 @@ fun MainContentScreen(contentPadding: PaddingValues, navHostController: NavHostC
                     type = NavType.IntType
                 }
             )
-        ) {
+        ) { backStack ->
             ProductScreen(
+                viewModel = hiltViewModel(backStack),
                 modifier = Modifier.padding(contentPadding),
                 onCouponGenerated = {
                     navHostController.popBackStack()

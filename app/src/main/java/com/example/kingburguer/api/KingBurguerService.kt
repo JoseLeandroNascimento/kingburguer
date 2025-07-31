@@ -1,11 +1,11 @@
 package com.example.kingburguer.api
 
-import com.example.kingburguer.data.CouponResponse
-import com.example.kingburguer.data.FeedResponse
-import com.example.kingburguer.data.HighlightProductResponse
+import com.example.kingburguer.product.data.CouponResponse
+import com.example.kingburguer.home.data.FeedResponse
+import com.example.kingburguer.home.data.HighlightProductResponse
 import com.example.kingburguer.auth.data.LoginRequest
 import com.example.kingburguer.auth.data.LoginResponse
-import com.example.kingburguer.data.ProductDetailsResponse
+import com.example.kingburguer.product.data.ProductDetailsResponse
 import com.example.kingburguer.profile.data.ProfileResponse
 import com.example.kingburguer.auth.data.RefreshTokenRequest
 import com.example.kingburguer.auth.data.UserCreateResponse
